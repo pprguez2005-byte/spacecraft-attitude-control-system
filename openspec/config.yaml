@@ -1,0 +1,33 @@
+schema: spec-driven
+
+# Project context
+context: |
+  Proyecto: Sistema Embebido de Control de Posición Bidireccional para Orientación de Prototipos Espaciales en Microgravedad Simulada (TFG).
+  Directiva principal: Cero invención / Cero alucinaciones. Consulta obligatoria ante cualquier duda o falta de definición de medidas, valores o parámetros. Todo cambio o decisión debe estar explícitamente consultado y aprobado por el usuario.
+  Directiva Git: PROHIBICIÓN TOTAL DE TRABAJAR EN MAIN. Cada cambio debe desarrollarse en su propia rama nueva de Git (change/<nombre-cambio>).
+  Idioma: Español técnico y formal con terminología estándar de ingeniería.
+  Manual operativo: AGENTS.md
+  Contexto general del proyecto: openspec/context/CONTEXTO_GENERAL.md
+  Repositorio de informes diarios: informes/
+
+# Per-artifact rules
+rules:
+  proposal:
+    - Explicar con claridad el objetivo y justificación técnica del cambio
+    - No inventar parámetros ni requisitos; basarse en lo aprobado por el usuario
+  specs:
+    - Incluir requisitos formales verificables
+  design:
+    - Incluir fundamento físico, matemático o arquitectónico
+  tasks:
+    - Desglosar en pasos pequeños y fácilmente verificables
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Verificar que el trabajo se ejecuta en una rama de Git dedicada y nunca en main
+  archive:
+    guidance:
+      - Actualizar openspec/context/CONTEXTO_GENERAL.md con el resumen del cambio completado
+      - Asegurar que el informe profesional diario en informes/ refleje los avances realizados
