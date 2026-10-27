@@ -126,10 +126,17 @@ sequenceDiagram
 
 ### Sesión 26/10/2026 (Sesión de Apertura del Espacio de Trabajo)
 - **Hitos completados:**
-  - Creación de [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/AGENTS.md) estableciendo las reglas inviolables de cero invención, control absoluto por parte del usuario y lectura obligatoria al inicio de cada sesión.
-  - Creación del repositorio de contextos en `openspec/context/` y redacción de este documento [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/openspec/context/CONTEXTO_GENERAL.md).
+  - Creación de [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/AGENTS.md) estableciendo las reglas inviolables de cero invención, control absoluto por parte del usuario y lectura obligatoria al inicio de cada sesión.
+  - Creación del repositorio de contextos en `openspec/context/` y redacción de este documento [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/openspec/context/CONTEXTO_GENERAL.md).
   - Adopción obligatoria de la metodología OpenSpec para todas las propuestas y evoluciones técnicas del proyecto.
-  - Creación del directorio [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/informes/) y establecimiento del protocolo de emisión de informes profesionales diarios de ingeniería con código, gráficas y justificación académica.
+  - Creación del directorio [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/informes/) y establecimiento del protocolo de emisión de informes profesionales diarios de ingeniería con código, gráficas y justificación académica.
   - Adopción obligatoria de la regla de Git: **Prohibición absoluta de trabajar en `main`**, exigiendo una rama nueva dedicada para cada cambio de OpenSpec.
+
+### Sesión 27/10/2026
+- **Hitos completados:**
+  - Inicialización del repositorio Git local y creación de rama `change/despliegue-satelites-joystick-seguimiento`.
+  - Actualización de `AGENTS.md` y `openspec/config.yaml` incorporando la regla mandatoria de consulta obligatoria ante cualquier duda de medidas o valores.
+  - Formulación formal de la propuesta OpenSpec `despliegue-satelites-joystick-esp32` con sus 4 artefactos aprobados y validados.
+  - **Proceso pausado temporalmente:** El diseño de la batería superior en Fusion 360 y selección dimensional de motores/joystick queda suspendido hasta que el usuario dé la orden de reactivación (*"seguir con el proceso de los perfiles de fusion"*). Todas las preguntas técnicas y esquemas han quedado almacenados en `design.md`.
 - **Estado actual:**
-  - El entorno está completamente sincronizado, estructurado y listo para recibir las directrices del usuario para la primera propuesta de trabajo.
+  - Abordando la reestructuración del espacio de trabajo global `TFG/` para eliminar la segmentación por días, fijar una carpeta de trabajo permanente y centralizar el historial en un directorio de copias de seguridad (`backups/`).

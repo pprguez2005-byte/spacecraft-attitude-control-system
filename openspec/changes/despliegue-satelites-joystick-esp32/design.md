@@ -73,3 +73,32 @@ $$e(t) = \theta(t) \to 0$$
 | **Zona muerta o fricción en el joystick COTS** | El carro no detecta inclinaciones muy leves ($< 0{,}2^\circ$) | Calibrar filtrado paso bajo en ESP32 y seleccionar joystick con potenciómetros lineales de baja resistencia mecánica o efecto Hall |
 | **Pérdida de pasos en el motor transversal** | Desalineación del carro | Incluir finales de carrera de referencia (*homing*) en los extremos del perfil |
 | **Flexión de los perfiles en voladizo** | Desviación del plano horizontal | Escuadras trianguladas de refuerzo en los nodos de unión con el marco |
+
+---
+
+## ⏸️ Estado: Proceso Pausado por el Usuario (Cuestionario Pendiente)
+
+> **Nota de activación:** Este proceso queda formalmente suspendido hasta que el usuario indique reactivarlo con la orden: *"seguir con el proceso de los perfiles de fusion"* (o similar).  
+> A continuación se preservan las preguntas técnicas pendientes para definir dimensiones exactas y componentes:
+
+### 1. Dimensiones Mecánicas para Fusion 360
+1. **Longitud de los perfiles de la batería superior:**  
+   ¿De qué longitud deben ser los perfiles que avanzan hacia adelante? (Ej. $500\text{ mm}$, $600\text{ mm}$, $800\text{ mm}$ u otra medida según la carrera de eyección).
+2. **Tipo y sección de perfil de aluminio:**  
+   ¿Se utiliza perfil V-Slot/T-Slot **2020** ($20\times 20\text{ mm}$) o **2040** ($20\times 40\text{ mm}$)?
+3. **Número de perfiles en la batería superior:**  
+   ¿Cuántos perfiles paralelos conformarán el conjunto superior? (¿2 perfiles formando un raíl de soporte, 3, o una parrilla mayor?).
+
+### 2. Selección del Joystick Comercial COTS
+- **Opción A (Recomendada comercial):** Gimbal miniatura de Efecto Hall (tipo FrSky M9 / RadioMaster). Rodamientos de bolas, fricción nula, muelles desacoplables con tornillo sin abrir la carcasa.
+- **Opción B:** Módulo joystick analógico clásico tipo Arduino / KY-023. Requiere retirar el muelle manualmente.
+- Modelo exacto adquirido o previsto por el usuario.
+
+### 3. Motorización y Transmisión
+1. **Motor de avance longitudinal:** ¿Tipo de motor para el avance hacia delante de la batería de perfiles? (NEMA 17 con correa GT2, husillo T8...).
+2. **Micromotor del carro transversal (izquierda a derecha):** ¿Tipo de motor para el carrito móvil que circula a lo largo del perfil? (NEMA 14/17 compacto, micromotorreductor N20 con encoder, servo/paso a paso 28BYJ-48).
+3. **Tipo de transmisión transversal:** ¿Motor montado en el carro moviéndose por tracción en correa/cremallera, o fijo en un extremo del perfil tirando del carro con poleas?
+
+### 4. Columna de Paneles (Satélites SpaceX)
+- ¿Cuántos paneles forman la columna y cuál es la masa total aproximada suspendida del hilo?
+
