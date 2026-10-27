@@ -2,7 +2,7 @@
 
 > **Proyecto:** Sistema Embebido de Control de Posición Bidireccional para Orientación de Prototipos Espaciales en Microgravedad Simulada  
 > **Titulación:** Trabajo de Fin de Grado (TFG)  
-> **Directorio de Trabajo:** `27_10_26`  
+> **Directorio de Trabajo:** `DESARROLLO_TFG`  
 > **Última Actualización:** 27/10/2026  
 
 ---
@@ -31,20 +31,26 @@
    - La fusión (*merge*) con `main` solo se efectúa tras la validación final del usuario y el archivado del cambio.
 
 5. **GESTIÓN Y PRESERVACIÓN DEL CONTEXTO:**
-   - En [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/openspec/context/CONTEXTO_GENERAL.md) se mantiene el resumen ejecutivo permanente con todo lo importante del proyecto.
+   - En [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) se mantiene el resumen ejecutivo permanente con todo lo importante del proyecto.
    - Al cerrar o cambiar de etapa, se actualiza dicho archivo para conservar la memoria acumulada sesión a sesión.
 
 6. **INFORME PROFESIONAL DE INGENIERÍA AL CIERRE DE CADA DÍA:**
-   - Al término de cada jornada de trabajo, es **obligatorio** generar un informe técnico profesional en el directorio [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/informes/).
+   - Al término de cada jornada de trabajo, es **obligatorio** generar un informe técnico profesional en el directorio [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/).
    - Debe detallar con rigor de nivel de TFG: objetivos cubiertos, justificación física/matemática, fragmentos de código comentados, esquemas, gráficas, diagramas (Mermaid/PNG), resultados de validación y conclusiones para la memoria.
 
 7. **LECTURA OBLIGATORIA AL INICIAR CADA SESIÓN:**
-   - El agente debe leer este archivo [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/AGENTS.md) y [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/openspec/context/CONTEXTO_GENERAL.md) al inicio de cada conversación para conocer el marco, el estado del proyecto y las restricciones vigentes.
+   - El agente debe leer este archivo [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/AGENTS.md) y [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) al inicio de cada conversación para conocer el marco, el estado del proyecto y las restricciones vigentes.
 
 8. **INTEGRIDAD TÉCNICA Y DOCUMENTAL:**
    - Mantener siempre la justificación matemática y física rigurosa de cada módulo.
    - Conservar comentarios técnicos y trazabilidad en el código.
    - Usar enlaces markdown con formato `file:///` con barras normales para referenciar ficheros y símbolos.
+
+9. **PROTOCOLO OBLIGATORIO DE COPIAS DE SEGURIDAD (BACKUPS):**
+   - El espacio de trabajo único y permanente donde siempre se opera es `DESARROLLO_TFG/`.
+   - Se prohíbe crear nuevas carpetas raíz por día de trabajo.
+   - Todas las sesiones previas se archivan en `backups/`.
+   - Al término de cada día trabajado, o cada vez que el usuario lo solicite expresamente, es obligatorio generar un backup de `DESARROLLO_TFG/` en `backups/backup_YYYY_MM_DD` (o comprimido en `.zip`).
 
 ---
 
@@ -84,54 +90,58 @@ Desarrollo mecatrónico completo de un banco de ensayos cartesianos de 2 GDL ($X
 
 ---
 
-## 🗂️ 4. Estructura del Espacio de Trabajo (`26_10_26`)
+## 🗂️ 4. Estructura del Espacio de Trabajo (`DESARROLLO_TFG`)
 
 ```text
-26_10_26/
-├── AGENTS.md                   # Manual operativo y de control del agente
-├── informes/                   # Informes profesionales diarios de ingeniería (TFG)
-│   └── INFORME_YYYY_MM_DD.md   # Informe diario de avance con código, diagramas y gráficas
-├── openspec/                   # Gestión formal de especificaciones y control de cambios
-│   ├── config.yaml             # Reglas operativas y contexto de OpenSpec
-│   ├── context/                # Repositorio de contexto día a día
-│   │   ├── README.md           # Índice del repositorio de contexto
-│   │   └── CONTEXTO_GENERAL.md # Resumen técnico integral permanente
-│   ├── specs/                  # Especificaciones principales consolidadas
-│   └── changes/                # Propuestas activas y archivadas (archive/)
-├── .agents/                    # Habilidades y flujos de trabajo OpenSpec
-└── [Módulos a coordinar según indique el usuario]:
-    ├── ESP32/                  # Módulos de comunicaciones y telemetría
-    ├── simulacion/             # Modelado dinámico y cálculos Python
-    ├── sysml/                  # Modelo MBSE SysML v2
-    ├── firmware/               # Código ARM C/C++
-    ├── cad/                    # Diseños mecánicos 3D
-    └── memoria/                # Documento LaTeX del TFG
+TFG/
+├── DESARROLLO_TFG/             # Espacio de trabajo único y permanente
+│   ├── AGENTS.md               # Manual operativo y de control del agente
+│   ├── backup.ps1              # Script de respaldo automatizado diario/bajo demanda
+│   ├── informes/               # Informes profesionales diarios de ingeniería (TFG)
+│   │   └── INFORME_YYYY_MM_DD.md
+│   ├── openspec/               # Gestión formal de especificaciones y control de cambios
+│   │   ├── config.yaml         # Reglas operativas y contexto de OpenSpec
+│   │   ├── context/            # Repositorio de contexto día a día
+│   │   │   ├── README.md       # Índice del repositorio de contexto
+│   │   │   └── CONTEXTO_GENERAL.md
+│   │   ├── specs/              # Especificaciones principales consolidadas
+│   │   └── changes/            # Propuestas activas y archivadas (archive/)
+│   ├── .agents/                # Habilidades y flujos de trabajo OpenSpec
+│   ├── ESP32/                  # Módulos de comunicaciones, joystick y telemetría
+│   └── Fusion/                 # Diseños mecánicos 3D CAD
+└── backups/                    # Repositorio central de copias de seguridad fechadas
+    ├── 09_10_26/               # Sesión histórica archivada
+    ├── 15_10_26/               # Sesión histórica archivada
+    ├── 23_10_26/               # Sesión histórica archivada
+    ├── 26_10_26/               # Sesión histórica archivada
+    ├── 27_10_26/               # Sesión histórica archivada
+    └── backup_YYYY_MM_DD/      # Copias diarias automáticas generadas al cierre
 ```
-
-> **Nota de trazabilidad histórica:** Las versiones y avances de sesiones previas se encuentran archivadas en los directorios hermanos correspondientes (ej. `..\23_10_26`). Ningún archivo se copia o altera sin que el usuario lo solicite.
 
 ---
 
 ## 📋 5. Protocolo de Trabajo Sesión a Sesión
 
-1. **Lectura y Sincronización:** Leer [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/AGENTS.md) y [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/openspec/context/CONTEXTO_GENERAL.md) al inicio.
+1. **Lectura y Sincronización:** Leer [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/AGENTS.md) y [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) al inicio.
 2. **Definición del Objetivo:** Confirmar con el usuario el propósito concreto de la sesión.
 3. **Propuesta Formal OpenSpec (`openspec new change <nombre>`):** Generar los artefactos de propuesta (`proposal.md`, `specs/`, `design.md`, `tasks.md`) sin tocar código de proyecto.
 4. **Creación Obligatoria de Rama Git:** Crear y conmutar a una nueva rama dedicada (`git checkout -b change/<nombre-cambio>`). **Prohibido trabajar en `main`**.
 5. **Validación y Aprobación del Usuario:** Esperar confirmación y visto bueno explícito antes de cualquier ejecución.
 6. **Implementación de Tareas (`opsx apply`):** Desarrollar y verificar las tareas aprobadas paso a paso dentro de la rama.
-7. **Consolidación, Archivado y Fusión:** Archivar el cambio (`openspec archive`), actualizar [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/openspec/context/CONTEXTO_GENERAL.md) y fusionar a `main` bajo autorización expresa.
-8. **Cierre de Jornada (Informe de Ingeniería):** Generar el informe profesional diario en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/informes/) documentando los desarrollos con código, gráficas/imágenes, análisis matemático y lecciones aprendidas para la memoria final del TFG.
+7. **Consolidación, Archivado y Fusión:** Archivar el cambio (`openspec archive`), actualizar [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) y fusionar a `main` bajo autorización expresa.
+8. **Cierre de Jornada (Informe de Ingeniería y Backup):**
+   - Generar el informe profesional diario en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/).
+   - Ejecutar el backup diario de `DESARROLLO_TFG/` en `backups/backup_YYYY_MM_DD`.
 
 ---
 
 ## 📝 6. Registro de Acuerdos y Decisiones
 
 ### Sesión 26/10/2026
-- [x] **26/10/2026:** Creación de [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/AGENTS.md) con la directiva innegociable de cero invención, control absoluto por parte del usuario y lectura obligatoria al iniciar.
+- [x] **26/10/2026:** Creación de [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/AGENTS.md) con la directiva innegociable de cero invención, control absoluto por parte del usuario y lectura obligatoria al iniciar.
 - [x] **26/10/2026:** Adopción obligatoria de la metodología OpenSpec para cualquier propuesta de desarrollo y retención del contexto día a día.
-- [x] **26/10/2026:** Creación de la carpeta [`openspec/context/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/openspec/context/README.md) y el archivo de síntesis permanente [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/openspec/context/CONTEXTO_GENERAL.md).
-- [x] **26/10/2026:** Establecimiento obligatorio de emisión de informe profesional diario de ingeniería en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/27_10_26/informes/) con código, diagramas y resultados cuantitativos.
+- [x] **26/10/2026:** Creación de la carpeta [`openspec/context/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/README.md) y el archivo de síntesis permanente [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md).
+- [x] **26/10/2026:** Establecimiento obligatorio de emisión de informe profesional diario de ingeniería en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/) con código, diagramas y resultados cuantitativos.
 - [x] **26/10/2026:** Directiva obligatoria de Git: **Prohibición total de trabajar en `main`**. Cada cambio de OpenSpec debe tener su propia rama nueva dedicada (`change/<nombre>`).
 
 ### Sesión 27/10/2026
@@ -139,3 +149,5 @@ Desarrollo mecatrónico completo de un banco de ensayos cartesianos de 2 GDL ($X
 - [x] **27/10/2026:** Incorporación en Regla 1 de la directiva expresa de **CONSULTA OBLIGATORIA ANTE CUALQUIER INCERTIDUMBRE (medidas, valores, parámetros)**.
 - [x] **27/10/2026:** Adopción del concepto de simulación de despliegue tipo SpaceX (columna de paneles solares/satélites sostenidos por cable) con batería de perfiles superiores motorizados en avance longitudinal y carro móvil transversal.
 - [x] **27/10/2026:** Decisión de adquisición COTS para el sensor/joystick de inclinación y lectura/control mediante microcontrolador ESP32.
+- [x] **27/10/2026:** Reestructuración de la arquitectura de directorios de `TFG/`: eliminación de la división por carpetas diarias, establecimiento de `DESARROLLO_TFG/` como carpeta de trabajo fija y permanente, y archivo de sesiones históricas (`09_10_26` a `27_10_26`) en `backups/`.
+- [x] **27/10/2026:** Establecimiento del protocolo obligatorio de backups automatizados diarios o bajo demanda.

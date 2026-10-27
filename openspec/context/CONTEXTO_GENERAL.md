@@ -4,7 +4,7 @@
 > **Ubicación:** `openspec/context/CONTEXTO_GENERAL.md`  
 > **Proyecto:** Sistema Embebido de Control de Posición Bidireccional para Orientación de Prototipos Espaciales en Microgravedad Simulada  
 > **Titulación:** Trabajo de Fin de Grado (TFG)  
-> **Directorio:** `27_10_26`  
+> **Directorio:** `DESARROLLO_TFG`  
 > **Última actualización:** 27/10/2026  
 
 ---
@@ -21,8 +21,9 @@ El presente Trabajo de Fin de Grado (TFG) aborda el diseño, modelado, fabricaci
 2. **Subordinación Total al Usuario:** Ningún cambio de diseño, arquitectura, fichero o implementación se realiza de manera autónoma sin propuesta previa y visto bueno explícito del usuario.
 3. **Flujo de Trabajo Estricto con OpenSpec:** Toda nueva funcionalidad, módulo o cambio debe articularse mediante propuestas OpenSpec (`proposal.md`, especificaciones delta en `specs/`, diseño en `design.md` y tareas en `tasks.md`), garantizando la trazabilidad y la retención del contexto día a día.
 4. **Actualización Continua del Contexto:** Al finalizar o modificar un bloque de trabajo, este documento y el registro diario deben actualizarse para que las sesiones futuras mantengan la coherencia total del proyecto.
-5. **Informe Profesional Diario de Ingeniería:** Al finalizar cada jornada de trabajo, se debe emitir un informe técnico exhaustivo en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/26_10_26/informes/) que incluya código comentado, diagramas, gráficas, justificación físico-matemática y conclusiones directas para la memoria del TFG.
+5. **Informe Profesional Diario de Ingeniería:** Al finalizar cada jornada de trabajo, se debe emitir un informe técnico exhaustivo en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/) que incluya código comentado, diagramas, gráficas, justificación físico-matemática y conclusiones directas para la memoria del TFG.
 6. **Prohibición Estricta de Trabajar en Main (Git Branching Obligatorio):** Jamás se trabaja directamente en la rama `main`. Cada propuesta de cambio de OpenSpec debe desarrollarse en su propia rama dedicada (ej. `change/<nombre-cambio>`). La integración con `main` solo se hace tras visto bueno explícito y archivado del cambio.
+7. **Protocolo Obligatorio de Backups:** El espacio de trabajo permanente es `DESARROLLO_TFG`. Al cierre de cada jornada o bajo demanda, se genera un respaldo completo en `backups/backup_YYYY_MM_DD`. Todas las sesiones anteriores se conservan en `backups/`.
 
 ---
 
@@ -139,4 +140,4 @@ sequenceDiagram
   - Formulación formal de la propuesta OpenSpec `despliegue-satelites-joystick-esp32` con sus 4 artefactos aprobados y validados.
   - **Proceso pausado temporalmente:** El diseño de la batería superior en Fusion 360 y selección dimensional de motores/joystick queda suspendido hasta que el usuario dé la orden de reactivación (*"seguir con el proceso de los perfiles de fusion"*). Todas las preguntas técnicas y esquemas han quedado almacenados en `design.md`.
 - **Estado actual:**
-  - Abordando la reestructuración del espacio de trabajo global `TFG/` para eliminar la segmentación por días, fijar una carpeta de trabajo permanente y centralizar el historial en un directorio de copias de seguridad (`backups/`).
+  - Reestructuración completada: `DESARROLLO_TFG` queda establecida formalmente como la carpeta fija permanente de trabajo, con todas las sesiones históricas archivadas en `backups/` y el protocolo de copias automatizado activo. Espacio listo para la siguiente orden de trabajo.
