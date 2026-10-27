@@ -34,9 +34,10 @@
    - En [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) se mantiene el resumen ejecutivo permanente con todo lo importante del proyecto.
    - Al cerrar o cambiar de etapa, se actualiza dicho archivo para conservar la memoria acumulada sesión a sesión.
 
-6. **INFORME PROFESIONAL DE INGENIERÍA AL CIERRE DE CADA DÍA:**
-   - Al término de cada jornada de trabajo, es **obligatorio** generar un informe técnico profesional en el directorio [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/).
-   - Debe detallar con rigor de nivel de TFG: objetivos cubiertos, justificación física/matemática, fragmentos de código comentados, esquemas, gráficas, diagramas (Mermaid/PNG), resultados de validación y conclusiones para la memoria.
+6. **INFORME PROFESIONAL DE INGENIERÍA CONTINUO E INCREMENTAL (EN TIEMPO REAL):**
+   - **Prohibido esperar al cierre del día:** El informe técnico profesional de la jornada en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/) se genera y edita **de manera continua y progresiva en tiempo real a medida que se va trabajando**.
+   - Tras cada avance significativo (decisión técnica, desarrollo de código, formulación matemática, modificación CAD o configuración de OpenSpec), el agente debe actualizar y versionar inmediatamente el informe del día (`INFORME_YYYY_MM_DD_...md`).
+   - Debe reflejar con rigor de nivel de TFG: justificación física/matemática, fragmentos de código comentados, esquemas, gráficas, diagramas (Mermaid/PNG) y conclusiones intermedias, garantizando que jamás se pierda el registro por olvido o interrupción de sesión.
 
 7. **LECTURA OBLIGATORIA AL INICIAR CADA SESIÓN:**
    - El agente debe leer este archivo [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/AGENTS.md) y [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) al inicio de cada conversación para conocer el marco, el estado del proyecto y las restricciones vigentes.
@@ -129,9 +130,9 @@ TFG/
 5. **Validación y Aprobación del Usuario:** Esperar confirmación y visto bueno explícito antes de cualquier ejecución.
 6. **Implementación de Tareas (`opsx apply`):** Desarrollar y verificar las tareas aprobadas paso a paso dentro de la rama.
 7. **Consolidación, Archivado y Fusión:** Archivar el cambio (`openspec archive`), actualizar [`CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) y fusionar a `main` bajo autorización expresa.
-8. **Cierre de Jornada (Informe de Ingeniería y Backup):**
-   - Generar el informe profesional diario en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/).
-   - Ejecutar el backup diario de `DESARROLLO_TFG/` en `backups/backup_YYYY_MM_DD`.
+8. **Elaboración Continua del Informe y Respaldo de Jornada:**
+   - Mantener el informe profesional de ingeniería en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/) actualizado y editado en tiempo real con cada hito alcanzado.
+   - Ejecutar el backup de `DESARROLLO_TFG/` en `backups/backup_YYYY_MM_DD` al concluir la sesión o cuando el usuario lo solicite.
 
 ---
 
@@ -151,3 +152,4 @@ TFG/
 - [x] **27/10/2026:** Decisión de adquisición COTS para el sensor/joystick de inclinación y lectura/control mediante microcontrolador ESP32.
 - [x] **27/10/2026:** Reestructuración de la arquitectura de directorios de `TFG/`: eliminación de la división por carpetas diarias, establecimiento de `DESARROLLO_TFG/` como carpeta de trabajo fija y permanente, y archivo de sesiones históricas (`09_10_26` a `27_10_26`) en `backups/`.
 - [x] **27/10/2026:** Establecimiento del protocolo obligatorio de backups automatizados diarios o bajo demanda.
+- [x] **27/10/2026:** Directiva de **Informe Profesional Continuo e Incremental (en tiempo real)**: Prohibido esperar al final del día para redactar el informe; debe crearse y actualizarse dinámicamente con cada desarrollo, cálculo o hito para evitar pérdida de información.
