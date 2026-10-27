@@ -109,9 +109,10 @@ Se ha ejecutado la migración estructural del proyecto conforme al acuerdo forma
 
 ## 5. Actualización Normativa en `AGENTS.md`
 
-Se han introducido y versionado dos reglas inviolables en el manual operativo:
+Se han introducido y versionado tres reglas inviolables en el manual operativo:
 1. **Regla 1 (Ampliación - Consulta Obligatoria):** Obligación estricta de preguntar al usuario cualquier duda sobre valores numéricos, medidas, carreras, cargas o dimensiones antes de asumir datos.
-2. **Regla 9 (Protocolo de Backups):** Obligación de operar exclusivamente en `DESARROLLO_TFG/` y generar backups sistemáticos al cierre o bajo petición.
+2. **Regla 6 (Informe Continuo e Incremental en Tiempo Real):** Prohibición de esperar al cierre del día para documentar. El informe técnico se va redactando y versionando dinámicamente conforme se avanza en cada cálculo, código, modelo o decisión.
+3. **Regla 9 (Protocolo de Backups):** Obligación de operar exclusivamente en `DESARROLLO_TFG/` y generar backups sistemáticos al cierre o bajo petición.
 
 ---
 
