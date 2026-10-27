@@ -20,7 +20,7 @@ $backupsDir = Join-Path (Split-Path $sourceDir -Parent) "backups"
 $targetDir = Join-Path $backupsDir $backupFolderName
 
 Write-Host "=========================================" -ForegroundColor Cyan
-Write-Host "📦 INICIANDO COPIA DE SEGURIDAD DEL TFG" -ForegroundColor Cyan
+Write-Host "INICIANDO COPIA DE SEGURIDAD DEL TFG" -ForegroundColor Cyan
 Write-Host "Origen:  $sourceDir"
 Write-Host "Destino: $targetDir"
 Write-Host "========================================="
@@ -32,7 +32,7 @@ if (-not (Test-Path $backupsDir)) {
 robocopy $sourceDir $targetDir /E /XF *.log /XD .git
 
 if ($LASTEXITCODE -le 7) {
-    Write-Host "✅ Copia de seguridad completada con éxito en: $targetDir" -ForegroundColor Green
+    Write-Host "[OK] Copia de seguridad completada con exito en: $targetDir" -ForegroundColor Green
 } else {
-    Write-Host "⚠️ Hubo advertencias o errores durante el backup (código: $LASTEXITCODE)" -ForegroundColor Yellow
+    Write-Host "[ALERTA] Hubo advertencias o errores durante el backup (codigo: $LASTEXITCODE)" -ForegroundColor Yellow
 }
