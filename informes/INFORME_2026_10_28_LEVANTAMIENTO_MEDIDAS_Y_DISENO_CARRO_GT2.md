@@ -152,13 +152,27 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
 7. **Modelo 3D Directo en Formato CAD Abierto ([`Fusion/Banco_Mecatronico_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.obj)):**
    - Exportación de la geometría completa del ensamblaje (bastidor base $540 \times 500\text{ mm}$, 5 perfiles longitudinales de $600\text{ mm}$, eje transversal $540\text{ mm}$, soportes de motor/tensor y carro móvil V-Wheel) en formato `.obj` 1:1 listo para arrastrar y soltar directamente en Fusion 360.
 8. **Generación de Sólido B-Rep STEP Oficial del Bastidor Real 1:1 ([`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step)):**
-   - **Corrección Geométrica de Alta Precisión de las Caras de los Perfiles:**
-     - Perfiles modelados con sección transversal exacta normalizada V-Slot / T-Slot 2020: 4 ranuras perimetrales de $6{,}2\text{ mm}$ de embocadura con chaflanes a $45^\circ$, cavidad interior ensanchada a $11\text{ mm}$, núcleo central circular de $\varnothing 4{,}2\text{ mm}$ (roscable a M5) y radios en aristas exteriores.
-   - **Corrección y Rediseño de las Escuadras de Unión (Esquineras de 90°):**
-     - Geometría realista de fundición de aluminio ($20 \times 20 \times 20\text{ mm}$): base y respaldo de $3\text{ mm}$, dos nervios triangulares laterales de refuerzo de $3\text{ mm}$, bolsillo central vaciado de $14\text{ mm}$ de anchura y taladros pasantes de $\varnothing 5{,}5\text{ mm}$ en ambas caras para tornillos M5.
-   - **Posicionamiento Estricto según las Fotografías de Taller:**
-     - **Superiores:** Las 2 escuadras superiores se sitúan **encima** del travesaño horizontal superior (apoyadas en $Z = 480\text{ mm}$ hasta $Z = 500\text{ mm}$), enrasadas con la cara superior de las columnas.
-     - **Inferiores:** Las 2 escuadras inferiores se sitúan **debajo** del travesaño horizontal inferior (de $Z = 0\text{ mm}$ a $Z = 20\text{ mm}$), actuando como patas elevadoras y dejando el vano interior de $500\text{ mm}$ totalmente diáfano.
+   - **Corrección Geométrica de Máxima Fidelidad de la Sección del Perfil 2020 (Foto Macro):**
+     - A partir de la fotografía macro [`fotos medidas/WhatsApp Image 2026-10-28 at 17.09.52 (3).jpeg`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/fotos%20medidas/WhatsApp%20Image%202026-10-28%20at%2017.09.52%20(3).jpeg), se ha eliminado completamente el bisel triangular exterior erróneo de las versiones previas.
+     - **Geometría real:** Cuadrado exterior de $20 \times 20\text{ mm}$ con **chaflanes planos a $45^\circ$ ($1{,}0\text{ mm}$)** en las 4 esquinas exteriores, caras perimetrales exteriores completamente planas, bocas de ranura de **$6{,}2\text{ mm}$**, labios de $1{,}8\text{ mm}$ de grosor con transición biselada interna a $45^\circ$, cavidad interior ensanchada de **$11{,}0\text{ mm}$ de ancho $\times 4{,}2\text{ mm}$ de fondo**, núcleo central tubular con taladro circular de **$\varnothing 4{,}2\text{ mm}$ (roscable a M5)** y 4 nervios diagonales a $45^\circ$ de $1{,}8\text{ mm}$ de espesor.
+   - **Escuadras de Fundición de Aluminio de 90° ($20 \times 20 \times 20\text{ mm}$):**
+     - Geometría fiel con base de $3\text{ mm}$, respaldo de $3\text{ mm}$, **dos nervios triangulares laterales de $3\text{ mm}$**, **bolsillo central vaciado de $14\text{ mm}$ de anchura** y dos taladros pasantes de $\varnothing 5{,}5\text{ mm}$ para tornillería M5.
+   - **Auditoría y Reproducción Física de la Tornillería M5 (Reflejo de Tornillos Faltantes):**
+     - Siguiendo la observación del usuario en taller (*"hay algunas que les falta un tornillo"*):
+       - Los tornillos instalados son de cabeza alomada (pan-head ISO 7380) de $\varnothing 9{,}2\text{ mm}$ con arandela plana DIN 125 de $\varnothing 10{,}0\text{ mm}$.
+       - **Columnas Verticales:** Las 4 escuadras cuentan con su tornillo M5 fijado firmemente a la ranura de la columna vertical.
+       - **Travesaños Horizontales:** En las escuadras superior derecha (TR) e inferior izquierda (BL), el tornillo horizontal no está instalado, dejando el taladro pasante de $\varnothing 5{,}5\text{ mm}$ completamente abierto y visible, reproduciendo al 100% el estado físico exacto del prototipo de taller.
+   - **Posicionamiento Estricto según las Fotografías y Cuaderno:**
+     - **Superiores:** Apoyadas en $Z = 480\text{ mm}$ hasta $Z = 500\text{ mm}$, enrasadas con la cara superior de las columnas.
+     - **Inferiores:** Debajo del travesaño inferior (de $Z = 0\text{ mm}$ a $Z = 20\text{ mm}$), actuando como patas y dejando el vano de $500 \times 420\text{ mm}$ totalmente libre.
+   - **Recepción y Análisis del Nuevo Croquis Técnico ([`fotos medidas/WhatsApp Image 2026-10-28 at 18.36.39.jpeg`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/fotos%20medidas/WhatsApp%20Image%202026-10-28%20at%2018.36.39.jpeg)):**
+     - El usuario ha aportado un croquis de perspectiva isométrica y vista de detalle lateral que define la cinemática global del sistema:
+       1. **Eje de distribución de par:** Barra de sincronización transversal frontal que conecta las dos poleas motrices de las correas longitudinales rojas.
+       2. **Motor 1:** Situado en la esquina frontal derecha para accionar el eje de distribución y mover el puente longitudinalmente.
+       3. **Puntos "Fijo":** Anclajes fijos en las esquinas posteriores de los perfiles guía.
+       4. **Batería de perfiles (azul):** Conjunto móvil de 5 perfiles transversales que forma el puente móvil.
+       5. **Motor 2:** Montado sobre el puente de 5 perfiles para accionar el carro transversal que porta el sensor/satélite.
+       6. **Detalle lateral:** Muestra el bucle de correa con poleas motriz y tensora, motor paso a paso inferior y corredera del carro sobre el perfil.
    - Modelos disponibles en formatos estándar de intercambio:
      - STEP B-Rep nativo: [`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step) y [`Fusion/Banco_Mecatronico_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.step).
      - OBJ 3D: [`Fusion/Marco_Real_2020_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.obj).

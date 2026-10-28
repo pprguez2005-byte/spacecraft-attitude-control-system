@@ -1,9 +1,14 @@
 import os
 
 def generate_html():
-    obj_path = r"C:\Users\Usuario\Desktop\universidad\clase\TFG\DESARROLLO_TFG\Fusion\Marco_Real_2020_TFG.obj"
-    html_path = r"C:\Users\Usuario\Desktop\universidad\clase\TFG\DESARROLLO_TFG\Fusion\visor_3d_fusion.html"
+    if os.path.exists("/mnt/c/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion"):
+        base_dir = "/mnt/c/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion"
+    else:
+        base_dir = r"C:\Users\Usuario\Desktop\universidad\clase\TFG\DESARROLLO_TFG\Fusion"
+    obj_path = os.path.join(base_dir, "Marco_Real_2020_TFG.obj")
+    html_path = os.path.join(base_dir, "visor_3d_fusion.html")
 
+    print(f"Leyendo malla OBJ ({obj_path})...")
     with open(obj_path, 'r', encoding='utf-8') as f:
         obj_content = f.read()
 
@@ -12,7 +17,7 @@ def generate_html():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bastidor Real 1:1 - Perfiles V-Slot 2020 y Escuadras de 90°</title>
+    <title>Bastidor Real 1:1 - Perfiles 2020 T-Slot y Escuadras de Fundición</title>
     <style>
         body {{
             margin: 0;
@@ -36,8 +41,9 @@ def generate_html():
             border-radius: 8px;
             padding: 18px 22px;
             box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
-            max-width: 400px;
+            max-width: 440px;
             backdrop-filter: blur(10px);
+            z-index: 10;
         }}
         h1 {{
             font-size: 15px;
@@ -57,11 +63,16 @@ def generate_html():
             background: #2c3e50;
             border: 1px solid #4a627a;
             border-radius: 4px;
-            padding: 2px 7px;
+            padding: 3px 8px;
             font-size: 11px;
             font-weight: bold;
             color: #1abc9c;
             margin: 3px 2px;
+        }}
+        .badge-warning {{
+            background: #7d3c00;
+            border-color: #e67e22;
+            color: #f39c12;
         }}
         .btn-group {{
             margin-top: 14px;
@@ -90,19 +101,20 @@ def generate_html():
             background: rgba(22, 25, 30, 0.94);
             border: 1px solid #34495e;
             border-radius: 6px;
-            padding: 10px 14px;
+            padding: 12px 16px;
             font-size: 12px;
+            z-index: 10;
         }}
         .legend-item {{
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 4px 0;
+            margin: 5px 0;
         }}
         .color-dot {{
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
         }}
         #loading {{
             position: absolute;
@@ -111,9 +123,11 @@ def generate_html():
             transform: translate(-50%, -50%);
             font-size: 16px;
             color: #3498db;
-            background: rgba(0,0,0,0.8);
-            padding: 12px 24px;
+            background: rgba(0,0,0,0.85);
+            padding: 16px 28px;
             border-radius: 8px;
+            border: 1px solid #34495e;
+            z-index: 100;
         }}
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -121,37 +135,41 @@ def generate_html():
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
 </head>
 <body>
-    <div id="loading">Cargando geometría CAD 1:1...</div>
+    <div id="loading">Cargando B-Rep 1:1 de OpenCASCADE...</div>
     <div id="canvas-container"></div>
 
     <div id="ui-panel">
-        <h1>📐 Bastidor Real 1:1 (Medidas de Taller)</h1>
-        <p>Estructura real levantada a partir de las fotografías y croquis del cuaderno (28/10/26):</p>
+        <h1>📐 Bastidor Real 1:1 Fotorrealista</h1>
+        <p>Reconstrucción paramétrica exacta según las fotos macro y medidas de taller (28/10/26):</p>
         <div>
-            <span class="metric-badge">Perfil: V-Slot 2020 con ranuras normalizadas</span>
-            <span class="metric-badge">Altura columnas: 500 mm</span>
-            <span class="metric-badge">Luz interior entre columnas: 500 mm</span>
-            <span class="metric-badge">Ancho exterior total: 540 mm</span>
-            <span class="metric-badge">4 Escuadras de 90° con nervios y taladro M5</span>
+            <span class="metric-badge">Perfil: 2020 T-Slot Ranura 6 (45° chaflán exterior)</span>
+            <span class="metric-badge">Núcleo M5: Taladro circular de 4.2 mm</span>
+            <span class="metric-badge">Escuadras: Fundición 90° con 2 nervios y vaciado 14 mm</span>
+            <span class="metric-badge">Columnas: 500 mm (Ancho total 540 mm)</span>
+            <span class="metric-badge">Luz interior útil: 500 x 420 mm</span>
+            <span class="metric-badge badge-warning">Tornillos: M5 alomados con arandela (refleja tornillos faltantes)</span>
         </div>
         <p style="margin-top: 10px; font-size: 12px; color: #95a5a6;">
-            Usa el ratón para rotar (clic izquierdo), mover (clic derecho) y hacer zoom (rueda).
+            Rotar: clic izq | Mover: clic der | Zoom: rueda del ratón
         </p>
         <div class="btn-group">
             <button onclick="setCameraView('iso')">Isométrica</button>
+            <button onclick="setCameraView('corner')">Detalle Esquina</button>
             <button onclick="setCameraView('front')">Frontal</button>
             <button onclick="setCameraView('top')">Cenital</button>
-            <button onclick="setCameraView('side')">Lateral</button>
-            <button onclick="toggleWireframe()">Alternar Malla</button>
+            <button onclick="toggleWireframe()">Malla Alámbrica</button>
         </div>
     </div>
 
     <div id="legend">
-        <div class="legend-item"><div class="color-dot" style="background: #e0e0e0; border: 1px solid #888;"></div> Perfiles Aluminio V-Slot 2020</div>
-        <div class="legend-item"><div class="color-dot" style="background: #888888;"></div> 4 Escuadras de Fundición 90° con Nervios</div>
+        <div style="font-weight: bold; margin-bottom: 6px; color: #3498db;">Componentes Físicos</div>
+        <div class="legend-item"><div class="color-dot" style="background: #d8d8d8; border: 1px solid #999;"></div> Perfil 2020 T-Slot Anodizado</div>
+        <div class="legend-item"><div class="color-dot" style="background: #888888; border: 1px solid #555;"></div> Escuadra 90° de Fundición de Aluminio</div>
+        <div class="legend-item"><div class="color-dot" style="background: #ffffff; border: 1px solid #333; box-shadow: 0 0 5px #fff;"></div> Tornillos M5 Alomados con Arandela</div>
+        <div class="legend-item"><div class="color-dot" style="background: #e67e22; border: 1px solid #d35400;"></div> Orificio libre (Tornillo faltante en taller)</div>
     </div>
 
-    <!-- Malla CAD B-Rep exportada directamente desde OpenCASCADE -->
+    <!-- Geometría CAD B-Rep exportada directamente desde OpenCASCADE -->
     <script type="text/plain" id="cad-obj-data">
 {obj_content}
     </script>
@@ -160,7 +178,7 @@ def generate_html():
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x16181d);
-        scene.fog = new THREE.FogExp2(0x16181d, 0.0005);
+        scene.fog = new THREE.FogExp2(0x16181d, 0.0004);
 
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 4000);
         camera.position.set(0, 250, 950);
@@ -177,22 +195,26 @@ def generate_html():
         controls.dampingFactor = 0.05;
         controls.target.set(0, 250, 0);
 
-        // Iluminación realista de taller
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+        // Iluminación de estudio para realzar ranuras y chaflanes
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.85);
-        dirLight.position.set(500, 800, 600);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        dirLight.position.set(400, 800, 600);
         dirLight.castShadow = true;
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
         scene.add(dirLight);
 
-        const fillLight = new THREE.DirectionalLight(0x74b9ff, 0.35);
+        const fillLight = new THREE.DirectionalLight(0x74b9ff, 0.4);
         fillLight.position.set(-500, 300, -400);
         scene.add(fillLight);
 
-        // Rejilla de suelo
+        const bottomLight = new THREE.DirectionalLight(0xffeedd, 0.3);
+        bottomLight.position.set(0, -300, 200);
+        scene.add(bottomLight);
+
+        // Rejilla de suelo de taller
         const grid = new THREE.GridHelper(1000, 20, 0x34495e, 0x222a33);
         grid.position.y = 0;
         scene.add(grid);
@@ -200,17 +222,15 @@ def generate_html():
         let cadMesh = null;
         let isWireframe = false;
 
-        // Material de aluminio anodizado satinado
         const matAlum = new THREE.MeshStandardMaterial({{
-            color: 0xdddddd,
-            metalness: 0.88,
-            roughness: 0.22,
+            color: 0xd8d8d8,
+            metalness: 0.85,
+            roughness: 0.25,
             polygonOffset: true,
             polygonOffsetFactor: 1,
             polygonOffsetUnits: 1
         }});
 
-        // Cargar geometría OBJ embebida
         const objText = document.getElementById('cad-obj-data').textContent;
         const loader = new THREE.OBJLoader();
         const obj = loader.parse(objText);
@@ -242,15 +262,19 @@ def generate_html():
 
         function setCameraView(view) {{
             if (view === 'iso') {{
-                camera.position.set(500, 500, 750);
+                camera.position.set(450, 450, 700);
+                controls.target.set(0, 250, 0);
+            }} else if (view === 'corner') {{
+                // Enfoque a la escuadra superior izquierda para ver ranura, chaflán, nervios y tornillos
+                camera.position.set(-200, 530, 80);
+                controls.target.set(-240, 490, 0);
             }} else if (view === 'front') {{
                 camera.position.set(0, 250, 950);
+                controls.target.set(0, 250, 0);
             }} else if (view === 'top') {{
                 camera.position.set(0, 950, 0);
-            }} else if (view === 'side') {{
-                camera.position.set(950, 250, 0);
+                controls.target.set(0, 250, 0);
             }}
-            controls.target.set(0, 250, 0);
             controls.update();
         }}
 
@@ -283,7 +307,7 @@ def generate_html():
 '''
     with open(html_path, 'w', encoding='utf-8') as out:
         out.write(html_template)
-    print("visor_3d_fusion.html generado exitosamente!")
+    print(f"visor_3d_fusion.html generado con éxito ({os.path.getsize(html_path)} bytes)!")
 
 if __name__ == "__main__":
     generate_html()
