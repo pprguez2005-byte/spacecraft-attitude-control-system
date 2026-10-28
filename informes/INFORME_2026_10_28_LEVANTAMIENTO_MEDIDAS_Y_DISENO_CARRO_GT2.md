@@ -152,13 +152,17 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
 7. **Modelo 3D Directo en Formato CAD Abierto ([`Fusion/Banco_Mecatronico_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.obj)):**
    - Exportación de la geometría completa del ensamblaje (bastidor base $540 \times 500\text{ mm}$, 5 perfiles longitudinales de $600\text{ mm}$, eje transversal $540\text{ mm}$, soportes de motor/tensor y carro móvil V-Wheel) en formato `.obj` 1:1 listo para arrastrar y soltar directamente en Fusion 360.
 8. **Generación de Sólido B-Rep STEP Oficial del Bastidor Real 1:1 ([`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step)):**
-   - Modelado B-Rep exacto 1:1 de la estructura física mostrada en las 8 fotografías reales y croquis manuscrito de taller (`28-10-26`), aislando el marco base antes de añadir subsistemas:
-     - **2 Columnas Verticales:** Perfil ranurado V-Slot 2020 de $500\text{ mm}$ de altura.
-     - **2 Travesaños Horizontales:** Perfil ranurado V-Slot 2020 de $500\text{ mm}$ montados interiormente entre las columnas, dejando una luz interior de $500\text{ mm}$ y un ancho exterior total de $540\text{ mm}$ ($20 + 500 + 20\text{ mm}$).
-     - **4 Escuadras de 90°:** Escuadras triangulares de fundición de aluminio ($20 \times 20\text{ mm}$) colocadas en las uniones superior e inferior tal y como se aprecian en las fotos.
+   - **Corrección Geométrica de Alta Precisión de las Caras de los Perfiles:**
+     - Perfiles modelados con sección transversal exacta normalizada V-Slot / T-Slot 2020: 4 ranuras perimetrales de $6{,}2\text{ mm}$ de embocadura con chaflanes a $45^\circ$, cavidad interior ensanchada a $11\text{ mm}$, núcleo central circular de $\varnothing 4{,}2\text{ mm}$ (roscable a M5) y radios en aristas exteriores.
+   - **Corrección y Rediseño de las Escuadras de Unión (Esquineras de 90°):**
+     - Geometría realista de fundición de aluminio ($20 \times 20 \times 20\text{ mm}$): base y respaldo de $3\text{ mm}$, dos nervios triangulares laterales de refuerzo de $3\text{ mm}$, bolsillo central vaciado de $14\text{ mm}$ de anchura y taladros pasantes de $\varnothing 5{,}5\text{ mm}$ en ambas caras para tornillos M5.
+   - **Posicionamiento Estricto según las Fotografías de Taller:**
+     - **Superiores:** Las 2 escuadras superiores se sitúan **encima** del travesaño horizontal superior (apoyadas en $Z = 480\text{ mm}$ hasta $Z = 500\text{ mm}$), enrasadas con la cara superior de las columnas.
+     - **Inferiores:** Las 2 escuadras inferiores se sitúan **debajo** del travesaño horizontal inferior (de $Z = 0\text{ mm}$ a $Z = 20\text{ mm}$), actuando como patas elevadoras y dejando el vano interior de $500\text{ mm}$ totalmente diáfano.
    - Modelos disponibles en formatos estándar de intercambio:
      - STEP B-Rep nativo: [`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step) y [`Fusion/Banco_Mecatronico_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.step).
      - OBJ 3D: [`Fusion/Marco_Real_2020_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.obj).
+     - STL 3D: [`Fusion/Marco_Real_2020_TFG.stl`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.stl).
      - Visor WebGL 3D interactivo en navegador: [`Fusion/visor_3d_fusion.html`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/visor_3d_fusion.html).
 
 ---
