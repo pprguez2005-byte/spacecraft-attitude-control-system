@@ -142,6 +142,15 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
    - Brida inferior con orificios de montaje para PCB de joystick COTS y un **ojal guía central de $4{,}5\text{ mm}$**, asegurando que el hilo transmita la inclinación angular sin transmitir fuerza axial al sensor.
 4. **Script de Automatización para Fusion 360 ([`Fusion/crear_bateria_5_perfiles_fusion.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/crear_bateria_5_perfiles_fusion.py)):**
    - Script oficial en Python ejecutable desde Autodesk Fusion 360 (`Shift + S`) que construye directamente en el espacio de trabajo la batería de 5 perfiles 2020 de $600\text{ mm}$ espaciados a $120\text{ mm}$ y el eje transversal guía de $540\text{ mm}$.
+5. **Visor Interactivo 3D WebGL ([`Fusion/visor_3d_fusion.html`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/visor_3d_fusion.html)):**
+   - Entorno 3D interactivo en navegador desarrollado con Three.js que renderiza la estructura completa a escala 1:1:
+     - Bastidor base real ($540 \times 500\text{ mm}$).
+     - Batería superior de 5 perfiles 2020 de $600\text{ mm}$ espaciados $120\text{ mm}$.
+     - Eje transversal móvil de $540\text{ mm}$.
+     - Soporte lateral para motor paso a paso NEMA 17.
+     - Soporte tensor para polea loca idler GT2.
+     - Carro gantry móvil con 4 ruedas V-Wheel, sujeción de correa GT2 y sensor joystick en el centro.
+     - Simulación cinemática en tiempo real del barrido transversal ($\pm 200\text{ mm}$) y controles orbitales de cámara (rotación, zoom, encuadre frontal, cenital y lateral).
 
 ---
 

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor 3D Interactivo - Banco Mecatrónico TFG (Simulación Despliegue SpaceX)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #1a1e24;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ecf0f1;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+        #ui-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(26, 30, 36, 0.92);
+            border: 1px solid #34495e;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 360px;
+            backdrop-filter: blur(8px);
+        }
+        h1 {
+            font-size: 16px;
+            margin: 0 0 8px 0;
+            color: #3498db;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        p {
+            font-size: 13px;
+            margin: 4px 0;
+            line-height: 1.4;
+            color: #bdc3c7;
+        }
+        .metric-badge {
+            display: inline-block;
+            background: #2c3e50;
+            border: 1px solid #4a627a;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #1abc9c;
+            margin: 2px 0;
+        }
+        .btn-group {
+            margin-top: 12px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #2980b9;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #3498db;
+            transform: translateY(-1px);
+        }
+        #legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 30, 36, 0.9);
+            border: 1px solid #34495e;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+    </style>
+    <!-- Three.js y OrbitControls desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="ui-panel">
+        <h1>🛰️ Banco de Ensayos TFG</h1>
+        <p><strong>Configuración Mecatrónica Biaxial:</strong></p>
+        <p>• Marco Base: <span class="metric-badge">540 × 500 mm (Perfil 2020)</span></p>
+        <p>• Batería Superior: <span class="metric-badge">5 perfiles × 600 mm (Paso 120 mm)</span></p>
+        <p>• Transmisión Transversal: <span class="metric-badge">Correa GT2 + NEMA 17</span></p>
+        <p>• Carro Móvil: <span class="metric-badge">4 Ruedas V-Wheel POM + Joystick COTS</span></p>
+
+        <div class="btn-group">
+            <button onclick="setView('iso')">Isométrica</button>
+            <button onclick="setView('front')">Frontal</button>
+            <button onclick="setView('top')">Superior</button>
+            <button onclick="setView('side')">Lateral</button>
+            <button onclick="toggleAnimation()">Animar Avance</button>
+        </div>
+    </div>
+
+    <div id="legend">
+        <div class="legend-item"><div class="color-dot" style="background: #bdc3c7;"></div> Perfiles Aluminio 2020</div>
+        <div class="legend-item"><div class="color-dot" style="background: #27ae60;"></div> Batería Superior 5x (600 mm)</div>
+        <div class="legend-item"><div class="color-dot" style="background: #2c3e50;"></div> Motor Paso a Paso NEMA 17</div>
+        <div class="legend-item"><div class="color-dot" style="background: #e67e22;"></div> Correa Síncrona GT2</div>
+        <div class="legend-item"><div class="color-dot" style="background: #e74c3c;"></div> Carro Móvil V-Wheel & Joystick</div>
+        <div class="legend-item"><div class="color-dot" style="background: #9b59b6;"></div> Paneles Satelitales (SpaceX)</div>
+    </div>
+
+    <script>
+        // Configuración de Escena Three.js
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x15181c);
+        scene.fog = new THREE.FogExp2(0x15181c, 0.0006);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 3000);
+        camera.position.set(700, 600, 900);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.target.set(0, 200, 0);
+
+        // Iluminación
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(500, 1000, 700);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0x3498db, 0.3);
+        fillLight.position.set(-500, 300, -500);
+        scene.add(fillLight);
+
+        // Suelo y Rejilla
+        const grid = new THREE.GridHelper(1400, 28, 0x34495e, 0x222a33);
+        grid.position.y = -50;
+        scene.add(grid);
+
+        // Materiales
+        const matAlumBase = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.85, roughness: 0.3 });
+        const matAlumBat  = new THREE.MeshStandardMaterial({ color: 0x48c9b0, metalness: 0.7, roughness: 0.35 });
+        const matNEMA     = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.4, roughness: 0.5 });
+        const matBelt     = new THREE.MeshStandardMaterial({ color: 0xd35400, roughness: 0.8 });
+        const matCarriage = new THREE.MeshStandardMaterial({ color: 0xe74c3c, metalness: 0.5, roughness: 0.4 });
+        const matWheel    = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.3 });
+        const matBrackets = new THREE.MeshStandardMaterial({ color: 0x95a5a6, metalness: 0.9, roughness: 0.2 });
+        const matSat      = new THREE.MeshStandardMaterial({ color: 0x8e44ad, metalness: 0.8, roughness: 0.3 });
+        const matWire     = new THREE.LineBasicMaterial({ color: 0xf1c40f, linewidth: 2 });
+
+        const groupAssembly = new THREE.Group();
+
+        // 1. MARCO BASE FRONTAL (540 mm exterior, 500 mm interior)
+        // Montantes Verticales (500 mm)
+        const geoVertical = new THREE.BoxGeometry(20, 500, 20);
+        const colLeft = new THREE.Mesh(geoVertical, matAlumBase);
+        colLeft.position.set(-250, 250, 0);
+        colLeft.castShadow = true;
+        groupAssembly.add(colLeft);
+
+        const colRight = new THREE.Mesh(geoVertical, matAlumBase);
+        colRight.position.set(250, 250, 0);
+        colRight.castShadow = true;
+        groupAssembly.add(colRight);
+
+        // Perfil Horizontal Superior (540 mm)
+        const geoHoriz = new THREE.BoxGeometry(540, 20, 20);
+        const beamTop = new THREE.Mesh(geoHoriz, matAlumBase);
+        beamTop.position.set(0, 500, 0);
+        beamTop.castShadow = true;
+        groupAssembly.add(beamTop);
+
+        // Perfil Horizontal Inferior (540 mm)
+        const beamBottom = new THREE.Mesh(geoHoriz, matAlumBase);
+        beamBottom.position.set(0, 0, 0);
+        beamBottom.castShadow = true;
+        groupAssembly.add(beamBottom);
+
+        // Escuadras de 90°
+        function addBracket(x, y, z, rotZ) {
+            const shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.lineTo(25, 0);
+            shape.lineTo(0, 25);
+            shape.closePath();
+            const extrudeSettings = { depth: 18, bevelEnabled: false };
+            const geoBracket = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const mesh = new THREE.Mesh(geoBracket, matBrackets);
+            mesh.position.set(x, y, z);
+            mesh.rotation.z = rotZ;
+            groupAssembly.add(mesh);
+        }
+        addBracket(-240, 470, -9, 0);
+        addBracket(240, 495, -9, Math.PI / 2);
+        addBracket(-240, 5, -9, -Math.PI / 2);
+        addBracket(240, 30, -9, Math.PI);
+
+        // 2. BATERÍA SUPERIOR DE 5 PERFILES (600 mm de largo, avance en Z hacia adelante)
+        const geoLongitudinal = new THREE.BoxGeometry(20, 20, 600);
+        const pitch = 120; // 480 mm / 4 = 120 mm entre centros
+        for (let i = 0; i < 5; i++) {
+            const posX = -240 + (i * pitch);
+            const profLong = new THREE.Mesh(geoLongitudinal, matAlumBat);
+            profLong.position.set(posX, 520, 300); // Se proyecta hacia Z positivo (adelante)
+            profLong.castShadow = true;
+            groupAssembly.add(profLong);
+        }
+
+        // 3. EJE TRANSVERSAL GUÍA CON CORREA GT2 (Móvil a lo largo de la batería)
+        const gantryGroup = new THREE.Group();
+        gantryGroup.position.set(0, 540, 300); // Posición inicial en el centro de la batería
+
+        const railTransverse = new THREE.Mesh(new THREE.BoxGeometry(540, 20, 20), matAlumBase);
+        railTransverse.castShadow = true;
+        gantryGroup.add(railTransverse);
+
+        // Motor NEMA 17 en el extremo izquierdo
+        const nemaMotor = new THREE.Mesh(new THREE.BoxGeometry(42.3, 42.3, 40), matNEMA);
+        nemaMotor.position.set(-270, 0, 0);
+        nemaMotor.castShadow = true;
+        gantryGroup.add(nemaMotor);
+
+        // Polea GT2 NEMA
+        const pulleyNema = new THREE.Mesh(new THREE.CylinderGeometry(8, 8, 10, 16), matBrackets);
+        pulleyNema.rotation.x = Math.PI / 2;
+        pulleyNema.position.set(-245, 0, 15);
+        gantryGroup.add(pulleyNema);
+
+        // Polea Tensora Idler en el extremo derecho
+        const idlerPulley = new THREE.Mesh(new THREE.CylinderGeometry(7, 7, 10, 16), matBrackets);
+        idlerPulley.rotation.x = Math.PI / 2;
+        idlerPulley.position.set(255, 0, 15);
+        gantryGroup.add(idlerPulley);
+
+        // Correa GT2 (Lazo)
+        const beltTop = new THREE.Mesh(new THREE.BoxGeometry(500, 2, 6), matBelt);
+        beltTop.position.set(5, 7, 15);
+        gantryGroup.add(beltTop);
+
+        const beltBottom = new THREE.Mesh(new THREE.BoxGeometry(500, 2, 6), matBelt);
+        beltBottom.position.set(5, -7, 15);
+        gantryGroup.add(beltBottom);
+
+        // 4. CARRO MÓVIL TRANSVERSAL V-WHEEL
+        const carriageGroup = new THREE.Group();
+        carriageGroup.position.set(0, 0, 25);
+
+        // Placa del Carro
+        const carriagePlate = new THREE.Mesh(new THREE.BoxGeometry(65, 75, 5), matCarriage);
+        carriagePlate.castShadow = true;
+        carriageGroup.add(carriagePlate);
+
+        // 4 Ruedas V-Wheel
+        const geoWheel = new THREE.CylinderGeometry(12, 12, 8, 20);
+        const w1 = new THREE.Mesh(geoWheel, matWheel);
+        w1.rotation.x = Math.PI / 2;
+        w1.position.set(-22, 20, -5);
+        carriageGroup.add(w1);
+
+        const w2 = new THREE.Mesh(geoWheel, matWheel);
+        w2.rotation.x = Math.PI / 2;
+        w2.position.set(22, 20, -5);
+        carriageGroup.add(w2);
+
+        const w3 = new THREE.Mesh(geoWheel, matWheel);
+        w3.rotation.x = Math.PI / 2;
+        w3.position.set(-22, -20, -5);
+        carriageGroup.add(w3);
+
+        const w4 = new THREE.Mesh(geoWheel, matWheel);
+        w4.rotation.x = Math.PI / 2;
+        w4.position.set(22, -20, -5);
+        carriageGroup.add(w4);
+
+        // Soporte Joystick inferior y ojal
+        const joystickPCB = new THREE.Mesh(new THREE.BoxGeometry(32, 26, 4), new THREE.MeshStandardMaterial({ color: 0x16a085 }));
+        joystickPCB.position.set(0, -42, 6);
+        carriageGroup.add(joystickPCB);
+
+        const joystickLever = new THREE.Mesh(new THREE.CylinderGeometry(2, 2, 15, 12), matBrackets);
+        joystickLever.position.set(0, -42, 16);
+        joystickLever.rotation.x = Math.PI / 2;
+        carriageGroup.add(joystickLever);
+
+        gantryGroup.add(carriageGroup);
+        groupAssembly.add(gantryGroup);
+
+        // 5. CABLE DE SUSPENSIÓN Y PANELES SATELITALES (SPACEX)
+        const satGroup = new THREE.Group();
+        satGroup.position.set(0, 180, 325);
+
+        // Columna de 3 paneles satelitales planos apilados
+        for (let p = 0; p < 3; p++) {
+            const panel = new THREE.Mesh(new THREE.BoxGeometry(100, 15, 70), matSat);
+            panel.position.set(0, p * 22, 0);
+            panel.castShadow = true;
+            satGroup.add(panel);
+        }
+        groupAssembly.add(satGroup);
+
+        // Hilo de suspensión (Línea dinámica entre carro y paneles)
+        const wireGeo = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Point3D ? new THREE.Vector3(0, 500, 325) : new THREE.Vector3(0, 500, 325),
+            new THREE.Vector3(0, 240, 325)
+        ]);
+        const wireLine = new THREE.Line(wireGeo, matWire);
+        groupAssembly.add(wireLine);
+
+        scene.add(groupAssembly);
+
+        // Funciones de Vistas de Cámara
+        function setView(view) {
+            controls.reset();
+            if (view === 'iso') {
+                camera.position.set(700, 600, 900);
+            } else if (view === 'front') {
+                camera.position.set(0, 300, 1100);
+            } else if (view === 'top') {
+                camera.position.set(0, 1200, 300);
+            } else if (view === 'side') {
+                camera.position.set(1100, 350, 300);
+            }
+            controls.target.set(0, 300, 300);
+        }
+
+        // Animación Dinámica
+        let isAnimating = false;
+        let time = 0;
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            if (isAnimating) {
+                time += 0.03;
+                // Movimiento transversal del carro (izquierda a derecha)
+                carriageGroup.position.x = Math.sin(time) * 160;
+                
+                // Movimiento de avance longitudinal de la batería (adelante - atrás)
+                gantryGroup.position.z = 300 + Math.cos(time * 0.7) * 180;
+                satGroup.position.z = gantryGroup.position.z;
+                satGroup.position.x = carriageGroup.position.x;
+
+                // Actualizar hilo de suspensión
+                const positions = wireLine.geometry.attributes.position.array;
+                positions[0] = carriageGroup.position.x;
+                positions[1] = gantryGroup.position.y - 45;
+                positions[2] = gantryGroup.position.z + 25;
+                positions[3] = satGroup.position.x;
+                positions[4] = satGroup.position.y + 60;
+                positions[5] = satGroup.position.z;
+                wireLine.geometry.attributes.position.needsUpdate = true;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
