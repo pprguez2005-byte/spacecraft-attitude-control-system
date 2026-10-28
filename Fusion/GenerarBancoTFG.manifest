@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"script",
+	"author":	"Antigravity TFG",
+	"description":	{
+		"":	"Generador automatico directo del banco mecatronico: Bateria de 5 perfiles 2020 de 600mm, marco base 540x500mm, eje transversal y carro movil GT2 con joystick para CubeSat"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
