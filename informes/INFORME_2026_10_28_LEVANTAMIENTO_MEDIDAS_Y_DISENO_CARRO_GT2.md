@@ -151,6 +151,14 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
    - El script dispone de manifiesto `.manifest` e interactúa con `adsk.core` y `adsk.fusion` para crear automáticamente el diseño completo en el espacio de trabajo de Fusion 360.
 7. **Modelo 3D Directo en Formato CAD Abierto ([`Fusion/Banco_Mecatronico_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.obj)):**
    - Exportación de la geometría completa del ensamblaje (bastidor base $540 \times 500\text{ mm}$, 5 perfiles longitudinales de $600\text{ mm}$, eje transversal $540\text{ mm}$, soportes de motor/tensor y carro móvil V-Wheel) en formato `.obj` 1:1 listo para arrastrar y soltar directamente en Fusion 360.
+8. **Generación de Sólido B-Rep STEP Oficial ([`Fusion/Banco_Mecatronico_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.step)):**
+   - Generación mediante el núcleo geométrico OpenCASCADE (AP214 AUTOMOTIVE DESIGN) de los sólidos exactos 1:1:
+     - 4 perfiles del bastidor base frontal ($540 \times 500\text{ mm}$).
+     - 5 perfiles longitudinales superiores de $600\text{ mm}$ con espaciado de $120\text{ mm}$.
+     - Eje transversal de $540\text{ mm}$.
+     - Bloque motor NEMA 17 ($42\text{ mm}$) y bloque tensor idler ($30\text{ mm}$).
+     - Carro gantry con taladro pasante central de $\varnothing 4{,}5\text{ mm}$ para el hilo y soporte del joystick.
+   - Creación de acceso directo ejecutable en el Escritorio (`Abrir Banco TFG en Fusion.lnk`) y asociación en el registro de Windows para apertura directa en Autodesk Fusion 360 con un solo clic.
 
 ---
 
