@@ -125,14 +125,29 @@ flowchart TD
 
 ---
 
-## 5. Estado de los Módulos y Próximos Pasos Inmediatos
+## 5. Implementación de Artefactos CAD 3D y Automatización en Fusion 360
 
-1. **Modelado CAD en Fusion 360:**
-   - Incorporar en el ensamblaje superior la batería de 5 perfiles longitudinales de $600\text{ mm}$ apoyados sobre el pórtico de $540\text{ mm}$ con separación entre centros de $120\text{ mm}$.
-   - Modelar el soporte para el motor NEMA 17 en el extremo del perfil transversal.
-   - Modelar el soporte de la polea tensora GT2 en el extremo opuesto.
-   - Diseñar la placa del carro deslizante con ruedas V-Wheel, mordazas de correa y anclaje desacoplado del joystick COTS.
-2. **Generación de Archivos Paramétricos y Scripts:**
-   - Generar el script Python para Fusion 360 / archivos OpenSCAD para fabricar los soportes en impresión 3D FDM con tolerancias ensayadas (+0.35 mm pasantes, +0.15 mm rodamientos).
-3. **Firmware ESP32:**
-   - Implementar el lazo de control servoguiado en el microcontrolador ESP32 para excitar el driver del motor NEMA 17 a partir de las tensiones analógicas del joystick.
+Se han desarrollado y versionado los siguientes modelos y scripts en el repositorio:
+
+1. **Soporte NEMA 17 para Extremo de Perfil 2020 ([`cad/soporte_motor_nema17_2020.scad`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/cad/soporte_motor_nema17_2020.scad)):**
+   - Placa vertical para motor NEMA 17 con taladros M3 a $31\text{ mm}$ y cuello de centrado de $23\text{ mm}$.
+   - Alas perpendiculares de anclaje a la ranura del perfil 2020 con taladro pasante M5 y chaflán para tuerca T.
+   - Cartelas triangulares de refuerzo lateral diseñadas para soportar la tensión de la correa sin flexión.
+2. **Soporte Tensor Idler GT2 ([`cad/soporte_tensor_idler_2020.scad`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/cad/soporte_tensor_idler_2020.scad)):**
+   - Horquilla en U con corredera de $16\text{ mm}$ para tornillo de eje M5, permitiendo ajustar y tensar la correa GT2 con precisión.
+   - Anclaje inferior al perfil 2020 mediante dos tornillos M5 a tuercas T.
+3. **Carro Móvil V-Wheel con Desacoplo de Hilo ([`cad/carro_movil_vwheel_joystick.scad`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/cad/carro_movil_vwheel_joystick.scad)):**
+   - Gantry plate con 4 taladros para ruedas V-Wheel de $24\text{ mm}$ (2 taladros fijos M5 superiores y 2 taladros de $7{,}2\text{ mm}$ inferiores para espaciadores excéntricos de regulación).
+   - Mordazas integradas con ranura de $1{,}6\text{ mm}$ y perfil dentado para fijar firmemente los dos extremos de la correa GT2 abierta.
+   - Brida inferior con orificios de montaje para PCB de joystick COTS y un **ojal guía central de $4{,}5\text{ mm}$**, asegurando que el hilo transmita la inclinación angular sin transmitir fuerza axial al sensor.
+4. **Script de Automatización para Fusion 360 ([`Fusion/crear_bateria_5_perfiles_fusion.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/crear_bateria_5_perfiles_fusion.py)):**
+   - Script oficial en Python ejecutable desde Autodesk Fusion 360 (`Shift + S`) que construye directamente en el espacio de trabajo la batería de 5 perfiles 2020 de $600\text{ mm}$ espaciados a $120\text{ mm}$ y el eje transversal guía de $540\text{ mm}$.
+
+---
+
+## 6. Próximos Pasos Inmediatos
+
+1. Validar la ejecución del script en Fusion 360 para visualizar el ensamblaje completo con el marco base.
+2. Desarrollar el módulo de firmware en `ESP32/` para:
+   - Lectura analógica por ADC del joystick ($\theta_x, \theta_y$).
+   - Generación de trenes de pulsos `STEP`/`DIR` para el motor paso a paso del carro transversal (compensación de $\theta_y \to 0$).
