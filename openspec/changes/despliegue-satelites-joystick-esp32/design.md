@@ -76,29 +76,42 @@ $$e(t) = \theta(t) \to 0$$
 
 ---
 
-## ⏸️ Estado: Proceso Pausado por el Usuario (Cuestionario Pendiente)
+## 📐 Especificaciones Dimensionales Reales Verificadas (28/10/2026)
 
-> **Nota de activación:** Este proceso queda formalmente suspendido hasta que el usuario indique reactivarlo con la orden: *"seguir con el proceso de los perfiles de fusion"* (o similar).  
-> A continuación se preservan las preguntas técnicas pendientes para definir dimensiones exactas y componentes:
+A partir del levantamiento fotográfico y dimensional aportado por el usuario en `fotos medidas/`:
 
-### 1. Dimensiones Mecánicas para Fusion 360
-1. **Longitud de los perfiles de la batería superior:**  
-   ¿De qué longitud deben ser los perfiles que avanzan hacia adelante? (Ej. $500\text{ mm}$, $600\text{ mm}$, $800\text{ mm}$ u otra medida según la carrera de eyección).
-2. **Tipo y sección de perfil de aluminio:**  
-   ¿Se utiliza perfil V-Slot/T-Slot **2020** ($20\times 20\text{ mm}$) o **2040** ($20\times 40\text{ mm}$)?
-3. **Número de perfiles en la batería superior:**  
-   ¿Cuántos perfiles paralelos conformarán el conjunto superior? (¿2 perfiles formando un raíl de soporte, 3, o una parrilla mayor?).
+1. **Marco Portal Existente:**
+   - **Perfil estructural:** Aluminio extrusionado V-Slot / T-Slot serie **2020** ($20\text{ mm} \times 20\text{ mm}$, ranura de $6\text{ mm}$).
+   - **Perfiles verticales:** 2 barras de longitud $500\text{ mm}$ ($50\text{ cm}$).
+   - **Luz horizontal interior:** $500\text{ mm}$ ($50\text{ cm}$) entre caras internas de los montantes verticales.
+   - **Ancho exterior total:** $540\text{ mm}$ ($54\text{ cm}$) considerando el solape de los perfiles laterales ($20 + 500 + 20\text{ mm}$).
+   - **Uniones de esquina:** Escuadras angulares de 90° de fundición de aluminio para perfil 2020 con tornillería M4/M5 y tuercas T.
 
-### 2. Selección del Joystick Comercial COTS
-- **Opción A (Recomendada comercial):** Gimbal miniatura de Efecto Hall (tipo FrSky M9 / RadioMaster). Rodamientos de bolas, fricción nula, muelles desacoplables con tornillo sin abrir la carcasa.
-- **Opción B:** Módulo joystick analógico clásico tipo Arduino / KY-023. Requiere retirar el muelle manualmente.
-- Modelo exacto adquirido o previsto por el usuario.
+2. **Sistema de Transmisión del Carro Transversal (Eje Y / Izquierda-Derecha):**
+   - **Tipo de accionamiento:** Correa dentada síncrona tipo impresora 3D (**Correa GT2**, ancho $6\text{ mm}$, paso $p = 2\text{ mm}$, alma de fibra de vidrio/neopreno).
+   - **Actuador:** Motor paso a paso (NEMA 17 / NEMA 14, ángulo de paso $1{,}8^\circ$, 200 pasos/vuelta).
+   - **Polea motriz:** Polea dentada GT2 de 20 dientes ($Z = 20$), avance lineal de $40\text{ mm/vuelta}$ ($2\text{ mm} \times 20$).
+   - **Polea de reenvío/tensado:** Polea loca con rodamientos (idler liso/dentado GT2) montada en el extremo opuesto del perfil.
+   - **Guiado del carro:** Carro deslizante sobre ruedas V-Wheel de POM con rodamientos 625ZZ en las ranuras del perfil 2020 (o casquillos lineales sobre varilla guía).
+   - **Sujeción de correa:** Mordaza de anclaje (*belt clamp*) integrada en el chasis del carrito para fijar ambos extremos de la correa GT2 abierta.
 
-### 3. Motorización y Transmisión
-1. **Motor de avance longitudinal:** ¿Tipo de motor para el avance hacia delante de la batería de perfiles? (NEMA 17 con correa GT2, husillo T8...).
-2. **Micromotor del carro transversal (izquierda a derecha):** ¿Tipo de motor para el carrito móvil que circula a lo largo del perfil? (NEMA 14/17 compacto, micromotorreductor N20 con encoder, servo/paso a paso 28BYJ-48).
-3. **Tipo de transmisión transversal:** ¿Motor montado en el carro moviéndose por tracción en correa/cremallera, o fijo en un extremo del perfil tirando del carro con poleas?
+3. **Batería Superior de Avance Longitudinal (Eje X):**
+   - Batería de perfiles paralelos que avanzan coordinadamente en profundidad a la par que la columna de paneles satelitales (simulación SpaceX).
+   - El puente superior móvil traslada la bancada transversal, logrando un espacio de trabajo cartesiano $X-Y$ servoguiado por el ESP32.
 
-### 4. Columna de Paneles (Satélites SpaceX)
-- ¿Cuántos paneles forman la columna y cuál es la masa total aproximada suspendida del hilo?
+---
+
+## Decisiones de Diseño Actualizadas
+
+### Decisión 1: Transmisión por Correa GT2 frente a Husillo en Carro Transversal
+- **Opción seleccionada:** Correa dentada GT2 de 6 mm con polea GT2-20T y motor paso a paso.
+- **Justificación técnica:** 
+  - La correa GT2 ofrece una velocidad lineal significativamente superior a un husillo ($> 300\text{ mm/s}$ frente a $\approx 30\text{ mm/s}$ en husillo T8), indispensable para que el carro superior reaccione con rapidez instantánea ante oscilaciones del péndulo de $f_n = 0{,}6435\text{ Hz}$ ($T_n \approx 1{,}55\text{ s}$).
+  - Cero juego mecánico (*backlash*) bajo pretensado elástico.
+  - Masa suspendida sobre el pórtico reducida al mínimo.
+
+### Decisión 2: Resolución Cinemática del Carro Transversal
+Con motor paso a paso de $1{,}8^\circ$ (200 pasos/rev), polea GT2-20T ($40\text{ mm/rev}$) y micropasos en driver TMC2209/A4988 a 16 micropasos:
+$$\text{Resolución} = \frac{40\text{ mm}}{200 \times 16} = \frac{40}{3200} = 0{,}0125\text{ mm/micropaso} \quad (12{,}5\,\mu\text{m})$$
+Esta resolución milimétrica es más de 10 veces superior a la precisión requerida para corregir desviaciones angulares de $\theta = 0{,}05^\circ$ ($0{,}52\text{ mm}$ a $L = 600\text{ mm}$).
 

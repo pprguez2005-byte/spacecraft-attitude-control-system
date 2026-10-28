@@ -8,11 +8,11 @@
 
 ## 2. Modelado Mecánico y Batería de Perfiles en Fusion 360
 
-- [ ] 2.1 Acordar con el usuario las medidas dimensionales de la cámara: longitud longitudinal de avance, ancho transversal y separación entre perfiles de la batería
-- [ ] 2.2 Extender el modelo de Fusion 360 (`Ensamblaje_TFG`) incorporando la batería de perfiles superiores y escuadras estructurales de anclaje
-- [ ] 2.3 Diseñar el carro transversal móvil (eje izquierda-derecha) con acoplamiento para el micromotor y soporte de desacoplo de carga para el sensor joystick
+- [x] 2.1 Acordar con el usuario las medidas dimensionales de la cámara (perfil V-Slot 2020, marco 500x500 mm interior, 540 mm exterior y escuadras de 90°)
+- [ ] 2.2 Extender el modelo de Fusion 360 (`Ensamblaje_TFG`) incorporando la batería de perfiles superiores de avance longitudinal
+- [ ] 2.3 Diseñar el carro transversal móvil (eje Y) accionado por correa síncrona GT2 y motor paso a paso, con mordazas de correa y soporte de desacoplo de carga para el sensor joystick
 
 ## 3. Integración, Pruebas y Documentación
 
 - [ ] 3.1 Validar la simulación cinemática del movimiento combinado (avance de paneles + centrado lateral de hilo)
-- [ ] 3.2 Generar el informe profesional diario de ingeniería en `informes/INFORME_2026_10_27.md` con esquemas, cálculos dinámicos y avances para la memoria del TFG
+- [ ] 3.2 Generar y mantener en tiempo real el informe profesional diario de ingeniería en `informes/` con esquemas, cálculos dinámicos y avances para la memoria del TFG
