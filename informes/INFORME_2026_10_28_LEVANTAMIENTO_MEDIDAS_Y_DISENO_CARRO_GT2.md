@@ -151,14 +151,15 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
    - El script dispone de manifiesto `.manifest` e interactúa con `adsk.core` y `adsk.fusion` para crear automáticamente el diseño completo en el espacio de trabajo de Fusion 360.
 7. **Modelo 3D Directo en Formato CAD Abierto ([`Fusion/Banco_Mecatronico_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.obj)):**
    - Exportación de la geometría completa del ensamblaje (bastidor base $540 \times 500\text{ mm}$, 5 perfiles longitudinales de $600\text{ mm}$, eje transversal $540\text{ mm}$, soportes de motor/tensor y carro móvil V-Wheel) en formato `.obj` 1:1 listo para arrastrar y soltar directamente en Fusion 360.
-8. **Generación de Sólido B-Rep STEP Oficial ([`Fusion/Banco_Mecatronico_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.step)):**
-   - Generación mediante el núcleo geométrico OpenCASCADE (AP214 AUTOMOTIVE DESIGN) de los sólidos exactos 1:1:
-     - 4 perfiles del bastidor base frontal ($540 \times 500\text{ mm}$).
-     - 5 perfiles longitudinales superiores de $600\text{ mm}$ con espaciado de $120\text{ mm}$.
-     - Eje transversal de $540\text{ mm}$.
-     - Bloque motor NEMA 17 ($42\text{ mm}$) y bloque tensor idler ($30\text{ mm}$).
-     - Carro gantry con taladro pasante central de $\varnothing 4{,}5\text{ mm}$ para el hilo y soporte del joystick.
-   - Creación de acceso directo ejecutable en el Escritorio (`Abrir Banco TFG en Fusion.lnk`) y asociación en el registro de Windows para apertura directa en Autodesk Fusion 360 con un solo clic.
+8. **Generación de Sólido B-Rep STEP Oficial del Bastidor Real 1:1 ([`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step)):**
+   - Modelado B-Rep exacto 1:1 de la estructura física mostrada en las 8 fotografías reales y croquis manuscrito de taller (`28-10-26`), aislando el marco base antes de añadir subsistemas:
+     - **2 Columnas Verticales:** Perfil ranurado V-Slot 2020 de $500\text{ mm}$ de altura.
+     - **2 Travesaños Horizontales:** Perfil ranurado V-Slot 2020 de $500\text{ mm}$ montados interiormente entre las columnas, dejando una luz interior de $500\text{ mm}$ y un ancho exterior total de $540\text{ mm}$ ($20 + 500 + 20\text{ mm}$).
+     - **4 Escuadras de 90°:** Escuadras triangulares de fundición de aluminio ($20 \times 20\text{ mm}$) colocadas en las uniones superior e inferior tal y como se aprecian en las fotos.
+   - Modelos disponibles en formatos estándar de intercambio:
+     - STEP B-Rep nativo: [`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step) y [`Fusion/Banco_Mecatronico_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.step).
+     - OBJ 3D: [`Fusion/Marco_Real_2020_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.obj).
+     - Visor WebGL 3D interactivo en navegador: [`Fusion/visor_3d_fusion.html`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/visor_3d_fusion.html).
 
 ---
 

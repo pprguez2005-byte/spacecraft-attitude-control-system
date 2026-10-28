@@ -1,7 +1,7 @@
 # ==============================================================================
 # Script de Automatización Oficial para Autodesk Fusion 360
-# TFG: Banco Mecatrónico de Microgravedad Simulada - Despliegue de Satélites
-# Autor: TFG Ingeniería Mecatrónica
+# TFG: Banco Mecatrónico - Modelo 1:1 del Bastidor Real Medido en Taller
+# Perfilería 2020: 540 x 500 mm con 4 escuadras de fundición de aluminio
 # ==============================================================================
 
 import adsk.core, adsk.fusion, traceback
@@ -12,7 +12,7 @@ def run(context):
         app = adsk.core.Application.get()
         ui  = app.userInterface
         
-        # 1. Obtener o crear un documento de diseño nuevo en Fusion 360
+        # 1. Obtener o crear un documento nuevo en Fusion 360
         design = app.activeProduct
         if not design or not isinstance(design, adsk.fusion.Design):
             doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
@@ -21,158 +21,94 @@ def run(context):
         rootComp = design.rootComponent
         extrudes = rootComp.features.extrudeFeatures
 
-        # ======================================================================
-        # PARÁMETROS GEOMÉTRICOS NOMINALES (Medidas reales en centímetros)
+        # Parámetros en centímetros (la API de Fusion 360 usa cm)
         # 1 cm = 10 mm
-        # ======================================================================
-        P_SZ = 2.0        # Perfil 20x20 mm (2.0 cm)
-        H_MARCO = 50.0    # Altura columnas 500 mm (50.0 cm)
-        W_INT = 50.0      # Luz interior marco 500 mm (50.0 cm)
-        W_EXT = 54.0      # Ancho total exterior 540 mm (54.0 cm)
-        L_BAT = 60.0      # Batería perfiles longitudinales 600 mm (60.0 cm)
-        N_PERF = 5        # 5 perfiles superiores
-        PITCH = 12.0      # 120 mm entre centros (12.0 cm)
+        P_SZ = 2.0        # 20 mm
+        H_COL = 50.0      # 500 mm (Altura columnas)
+        L_TRAV = 50.0     # 500 mm (Luz interior / longitud travesaño)
+        W_EXT = 54.0      # 540 mm (Ancho exterior total)
+        Z_TRAV_SUP = 46.0 # Cara inferior a 46 cm, superior a 48 cm (deja 2 cm para escuadra)
+        Z_TRAV_INF = 2.0  # Cara inferior a 2 cm sobre el suelo
 
-        # ----------------------------------------------------------------------
-        # FUNCIÓN AUXILIAR PARA CREAR UN PERFIL T-SLOT / V-SLOT SIMPLIFICADO
-        # ----------------------------------------------------------------------
-        def crear_perfil_prisma(nombre, p_min, p_max, eje_extrude, distancia):
+        # Función auxiliar para extruir prisma de perfil
+        def crear_perfil(nombre, p1, p2, dist):
             sketch = rootComp.sketches.add(rootComp.xYConstructionPlane)
-            lines = sketch.sketchCurves.sketchLines
-            # Rectángulo exterior
-            lines.addTwoPointRectangle(
-                adsk.core.Point3D.create(p_min[0], p_min[1], p_min[2]),
-                adsk.core.Point3D.create(p_max[0], p_max[1], p_max[2])
+            sketch.sketchCurves.sketchLines.addTwoPointRectangle(
+                adsk.core.Point3D.create(p1[0], p1[1], 0),
+                adsk.core.Point3D.create(p2[0], p2[1], 0)
             )
             prof = sketch.profiles.item(0)
             extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-            extDist = adsk.core.ValueInput.createByReal(distancia)
-            extInput.setDistanceExtent(False, extDist)
-            extFeature = extrudes.add(extInput)
-            body = extFeature.bodies.item(0)
-            body.name = nombre
-            return body
+            extInput.setDistanceExtent(False, adsk.core.ValueInput.createByReal(dist))
+            feat = extrudes.add(extInput)
+            b = feat.bodies.item(0)
+            b.name = nombre
+            return b
 
-        # ----------------------------------------------------------------------
-        # 1. BASTIDOR FRONTAL BASE (MEDIDAS DE TALLER: 540 x 500 mm)
-        # ----------------------------------------------------------------------
-        # Columna Izquierda (20x20x500 mm en vertical Y)
-        crear_perfil_prisma("Columna_Izquierda_2020_500mm", 
-                           [0, 0, 0], [P_SZ, H_MARCO, 0], 'Z', P_SZ)
-        
-        # Columna Derecha (20x20x500 mm a X = 52 cm)
-        crear_perfil_prisma("Columna_Derecha_2020_500mm", 
-                           [P_SZ + W_INT, 0, 0], [W_EXT, H_MARCO, 0], 'Z', P_SZ)
+        # Centrado en X = 0:
+        # Columna Izquierda: X de -27 cm a -25 cm, Y de -1 cm a +1 cm, extrusión en Z de 0 a 50 cm
+        crear_perfil("Columna_Izquierda_2020_500mm", [-27.0, -1.0], [-25.0, 1.0], H_COL)
 
-        # Travesaño Superior Frontal (540 mm en horizontal X a Y = 50 cm)
-        crear_perfil_prisma("Travesano_Superior_540mm", 
-                           [0, H_MARCO, 0], [W_EXT, H_MARCO + P_SZ, 0], 'Z', P_SZ)
+        # Columna Derecha: X de +25 cm a +27 cm, Y de -1 cm a +1 cm, extrusión en Z de 0 a 50 cm
+        crear_perfil("Columna_Derecha_2020_500mm", [25.0, -1.0], [27.0, 1.0], H_COL)
 
-        # Travesaño Inferior Frontal (540 mm en horizontal X a Y = -2 cm)
-        crear_perfil_prisma("Travesano_Inferior_540mm", 
-                           [0, -P_SZ, 0], [W_EXT, 0, 0], 'Z', P_SZ)
-
-        # ----------------------------------------------------------------------
-        # 2. BATERÍA SUPERIOR DE 5 PERFILES LONGITUDINALES (600 mm de avance)
-        # ----------------------------------------------------------------------
-        sketchBat = rootComp.sketches.add(rootComp.xYConstructionPlane)
-        for i in range(N_PERF):
-            # Posición en X: distribuido simétricamente en el marco
-            # Desde X = 3.0 cm hasta X = 51.0 cm con paso de 12 cm
-            x_centro = (P_SZ + 1.0) + (i * PITCH)
-            x0 = x_centro - (P_SZ / 2.0)
-            x1 = x_centro + (P_SZ / 2.0)
-            y0 = H_MARCO + P_SZ
-            y1 = H_MARCO + (2.0 * P_SZ)
-
-            sketchPerf = rootComp.sketches.add(rootComp.xYConstructionPlane)
-            sketchPerf.sketchCurves.sketchLines.addTwoPointRectangle(
-                adsk.core.Point3D.create(x0, y0, 0),
-                adsk.core.Point3D.create(x1, y1, 0)
-            )
-            # Extrusión hacia adelante en Z a 600 mm (60.0 cm)
-            profB = sketchPerf.profiles.item(0)
-            extInB = extrudes.createInput(profB, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-            extInB.setDistanceExtent(False, adsk.core.ValueInput.createByReal(L_BAT))
-            featB = extrudes.add(extInB)
-            b = featB.bodies.item(0)
-            b.name = f"Bateria_Longitudinal_Perfil_{i+1}_600mm"
-
-        # ----------------------------------------------------------------------
-        # 3. EJE TRANSVERSAL GUÍA PARA EL CARRO MÓVIL GT2 (540 mm)
-        # ----------------------------------------------------------------------
-        # Situado a mitad de la batería (Z = 30 cm) apoyado sobre la bancada
-        sketchGuia = rootComp.sketches.add(rootComp.xZConstructionPlane)
-        sketchGuia.sketchCurves.sketchLines.addTwoPointRectangle(
-            adsk.core.Point3D.create(0, 30.0, 0),
-            adsk.core.Point3D.create(W_EXT, 30.0 + P_SZ, 0)
+        # Travesaño Superior: entre X = -25 cm y X = +25 cm (50 cm de largo)
+        # Dibujamos en plano XZ a Z = 46 cm y extruimos en Y
+        sketchTS = rootComp.sketches.add(rootComp.xZConstructionPlane)
+        sketchTS.sketchCurves.sketchLines.addTwoPointRectangle(
+            adsk.core.Point3D.create(-25.0, 46.0, 0),
+            adsk.core.Point3D.create(25.0, 48.0, 0)
         )
-        profG = sketchGuia.profiles.item(0)
-        extInG = extrudes.createInput(profG, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-        extInG.setDistanceExtent(False, adsk.core.ValueInput.createByReal(P_SZ))
-        featG = extrudes.add(extInG)
-        bGuia = featG.bodies.item(0)
-        bGuia.name = "Perfil_Transversal_Guia_Carro_GT2_540mm"
+        profTS = sketchTS.profiles.item(0)
+        extTS = extrudes.createInput(profTS, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+        extTS.setDistanceExtent(False, adsk.core.ValueInput.createByReal(P_SZ))
+        featTS = extrudes.add(extTS)
+        featTS.bodies.item(0).name = "Travesano_Superior_2020_500mm"
 
-        # ----------------------------------------------------------------------
-        # 4. SOPORTE DE MOTOR PASO A PASO NEMA 17 (EXTREMO DERECHO)
-        # ----------------------------------------------------------------------
-        sketchMotor = rootComp.sketches.add(rootComp.xZConstructionPlane)
-        sketchMotor.sketchCurves.sketchLines.addTwoPointRectangle(
-            adsk.core.Point3D.create(W_EXT - 4.2, 28.0, 0),
-            adsk.core.Point3D.create(W_EXT + 1.0, 34.0, 0)
+        # Travesaño Inferior: entre X = -25 cm y X = +25 cm a Z = 2 cm
+        sketchTI = rootComp.sketches.add(rootComp.xZConstructionPlane)
+        sketchTI.sketchCurves.sketchLines.addTwoPointRectangle(
+            adsk.core.Point3D.create(-25.0, 2.0, 0),
+            adsk.core.Point3D.create(25.0, 4.0, 0)
         )
-        profM = sketchMotor.profiles.item(0)
-        extInM = extrudes.createInput(profM, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-        extInM.setDistanceExtent(False, adsk.core.ValueInput.createByReal(4.2))
-        featM = extrudes.add(extInM)
-        bMotor = featM.bodies.item(0)
-        bMotor.name = "Soporte_y_Motor_NEMA17_GT2"
+        profTI = sketchTI.profiles.item(0)
+        extTI = extrudes.createInput(profTI, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+        extTI.setDistanceExtent(False, adsk.core.ValueInput.createByReal(P_SZ))
+        featTI = extrudes.add(extTI)
+        featTI.bodies.item(0).name = "Travesano_Inferior_2020_500mm"
 
-        # ----------------------------------------------------------------------
-        # 5. SOPORTE TENSOR CON POLEA LOCA IDLER GT2 (EXTREMO IZQUIERDO)
-        # ----------------------------------------------------------------------
-        sketchIdler = rootComp.sketches.add(rootComp.xZConstructionPlane)
-        sketchIdler.sketchCurves.sketchLines.addTwoPointRectangle(
-            adsk.core.Point3D.create(-1.0, 28.5, 0),
-            adsk.core.Point3D.create(3.5, 33.5, 0)
-        )
-        profI = sketchIdler.profiles.item(0)
-        extInI = extrudes.createInput(profI, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-        extInI.setDistanceExtent(False, adsk.core.ValueInput.createByReal(3.0))
-        featI = extrudes.add(extInI)
-        bIdler = featI.bodies.item(0)
-        bIdler.name = "Soporte_Tensor_Polea_GT2"
+        # 4 Escuadras de 90 grados
+        def crear_escuadra(nombre, x0, z0, dx, dz):
+            sketchE = rootComp.sketches.add(rootComp.xZConstructionPlane)
+            lines = sketchE.sketchCurves.sketchLines
+            pA = adsk.core.Point3D.create(x0, z0, 0)
+            pB = adsk.core.Point3D.create(x0 + dx, z0, 0)
+            pC = adsk.core.Point3D.create(x0, z0 + dz, 0)
+            lines.addByTwoPoints(pA, pB)
+            lines.addByTwoPoints(pB, pC)
+            lines.addByTwoPoints(pC, pA)
+            profE = sketchE.profiles.item(0)
+            extE = extrudes.createInput(profE, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+            extE.setDistanceExtent(False, adsk.core.ValueInput.createByReal(1.8))
+            featE = extrudes.add(extE)
+            featE.bodies.item(0).name = nombre
 
-        # ----------------------------------------------------------------------
-        # 6. CARRO MÓVIL V-WHEEL CON BRIDA JOYSTICK Y OJAL PARA HILO CUBESAT
-        # ----------------------------------------------------------------------
-        # Centrado inicialmente en X = 27 cm (mitad del recorrido)
-        sketchCarro = rootComp.sketches.add(rootComp.xZConstructionPlane)
-        sketchCarro.sketchCurves.sketchLines.addTwoPointRectangle(
-            adsk.core.Point3D.create(23.5, 27.5, 0),
-            adsk.core.Point3D.create(30.5, 34.5, 0)
-        )
-        # Taladro pasante central de 4.5 mm (0.45 cm) para el hilo de suspensión
-        centerHole = adsk.core.Point3D.create(27.0, 31.0, 0)
-        sketchCarro.sketchCurves.sketchCircles.addByCenterRadius(centerHole, 0.225)
+        # Superior Izquierda (sobre travesaño superior)
+        crear_escuadra("Escuadra_Superior_Izquierda", -25.0, 48.0, 2.0, 2.0)
+        # Superior Derecha
+        crear_escuadra("Escuadra_Superior_Derecha", 25.0, 48.0, -2.0, 2.0)
+        # Inferior Izquierda (bajo travesaño inferior)
+        crear_escuadra("Escuadra_Inferior_Izquierda", -25.0, 2.0, 2.0, -2.0)
+        # Inferior Derecha
+        crear_escuadra("Escuadra_Inferior_Derecha", 25.0, 2.0, -2.0, -2.0)
 
-        profC = sketchCarro.profiles.item(0)
-        extInC = extrudes.createInput(profC, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
-        extInC.setDistanceExtent(False, adsk.core.ValueInput.createByReal(1.5))
-        featC = extrudes.add(extInC)
-        bCarro = featC.bodies.item(0)
-        bCarro.name = "Carro_Movil_VWheel_Gantry_Joystick"
-
-        # Mensaje de confirmación en la UI de Fusion
         if ui:
             ui.messageBox(
-                "¡Banco Mecatrónico TFG Generado Exitosamente con la API Oficial de Fusion 360!\n\n"
-                "- Bastidor base: 540 x 500 mm (Perfil V-Slot 2020)\n"
-                "- Batería superior: 5 perfiles longitudinales de 600 mm (paso 120 mm)\n"
-                "- Eje transversal móvil de 540 mm con correa GT2\n"
-                "- Soporte NEMA 17 y Tensor Idler en extremos\n"
-                "- Carro móvil V-Wheel con soporte de sensor Joystick y ojal para CubeSat"
+                "¡Bastidor Real 1:1 generado con éxito en Fusion 360!\n\n"
+                "- 2 Columnas verticales: 500 mm (Perfil 2020)\n"
+                "- 2 Travesaños horizontales: 500 mm (Luz interior 500 mm)\n"
+                "- Ancho exterior total: 540 mm\n"
+                "- 4 Escuadras triangulares de 90° de fundición de aluminio"
             )
 
     except:
@@ -181,4 +117,3 @@ def run(context):
 
 def stop(context):
     pass
-
