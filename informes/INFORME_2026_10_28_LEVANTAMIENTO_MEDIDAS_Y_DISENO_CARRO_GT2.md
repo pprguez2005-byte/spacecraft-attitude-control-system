@@ -90,12 +90,49 @@ flowchart LR
 
 ---
 
-## 4. Estado de los Módulos y Próximos Pasos Inmediatos
+## 4. Decisiones de Diseño Aprobadas (Sesión 28/10/2026)
+
+Tras la consulta formal, el usuario ha validado las siguientes especificaciones mecánicas:
+
+1. **Guiado del Carrito Móvil (Opción A - Ruedas V-Wheel):**
+   - El carro transversal se desplazará directamente sobre las ranuras en V del perfil de aluminio 2020 mediante ruedas **V-Wheel de POM** con rodamientos 625ZZ.
+   - Incorporará tuercas espaciadoras excéntricas para eliminar cualquier holgura o juego mecánico en las pistas.
+2. **Ubicación del Motor Paso a Paso Transversal:**
+   - Montaje del motor paso a paso (NEMA 17) **fijo en el extremo lateral del perfil** mediante soporte estructural impreso en 3D / pletina de aluminio.
+   - En el extremo opuesto se sitúa el tensor con polea loca idler GT2.
+   - El carro móvil resulta ultraligero al no cargar el peso del motor, permitiendo mayores aceleraciones y una respuesta dinámica óptima para el lazo servoguiado.
+3. **Batería Superior de Avance Longitudinal:**
+   - Estructura superior formada por una **batería de 5 perfiles de aluminio paralelos**.
+   - Longitud nominal seleccionada: **$600\text{ mm}$** (superior a los $500\text{ mm}$ del marco base para proporcionar mayor carrera útil de eyección).
+   - **Distribución geométrica transversal:**  
+     Para una luz interior de $500\text{ mm}$, distribuyendo los 5 perfiles de $20\text{ mm}$:
+     $$\text{Espaciado entre centros} = \frac{500\text{ mm} - 20\text{ mm}}{5 - 1} = \frac{480\text{ mm}}{4} = 120\text{ mm}$$
+     Se obtienen 4 vanos de $100\text{ mm}$ libres entre caras de perfiles y $120\text{ mm}$ entre ejes, garantizando un emparrillado simétrico de gran rigidez torsional.
+
+```mermaid
+flowchart TD
+    subgraph Parrilla_Superior["Batería Superior (5 Perfiles de 600 mm - Espaciado 120 mm)"]
+        P1["Perfil Longitudinal 1 (x = 0 mm)"]
+        P2["Perfil Longitudinal 2 (x = 120 mm)"]
+        P3["Perfil Longitudinal 3 (x = 240 mm - Centro)"]
+        P4["Perfil Longitudinal 4 (x = 360 mm)"]
+        P5["Perfil Longitudinal 5 (x = 480 mm)"]
+    end
+    MarcoBase["Marco Frontal 540x500 mm"] --- Parrilla_Superior
+    Parrilla_Superior --> PuenteTransversal["Eje Transversal (Perfil 2020 con Correa GT2)"]
+    PuenteTransversal --> CarroVWheel["Carro V-Wheel (Ruedas POM + Sensor Joystick)"]
+```
+
+---
+
+## 5. Estado de los Módulos y Próximos Pasos Inmediatos
 
 1. **Modelado CAD en Fusion 360:**
-   - Incorporar en el ensamblaje superior la batería de perfiles longitudinales apoyados sobre el pórtico de $540\text{ mm}$.
-   - Modelar el soporte para el motor NEMA 17 en un extremo del perfil transversal.
+   - Incorporar en el ensamblaje superior la batería de 5 perfiles longitudinales de $600\text{ mm}$ apoyados sobre el pórtico de $540\text{ mm}$ con separación entre centros de $120\text{ mm}$.
+   - Modelar el soporte para el motor NEMA 17 en el extremo del perfil transversal.
    - Modelar el soporte de la polea tensora GT2 en el extremo opuesto.
-   - Diseñar el carro deslizante con ruedas V-wheel y el anclaje de correa.
-2. **Firmware ESP32:**
-   - Configurar generación de pulsos `STEP`/`DIR` en el ESP32 para el driver de motor paso a paso del carro transversal sincronizado con la lectura analógica del joystick.
+   - Diseñar la placa del carro deslizante con ruedas V-Wheel, mordazas de correa y anclaje desacoplado del joystick COTS.
+2. **Generación de Archivos Paramétricos y Scripts:**
+   - Generar el script Python para Fusion 360 / archivos OpenSCAD para fabricar los soportes en impresión 3D FDM con tolerancias ensayadas (+0.35 mm pasantes, +0.15 mm rodamientos).
+3. **Firmware ESP32:**
+   - Implementar el lazo de control servoguiado en el microcontrolador ESP32 para excitar el driver del motor NEMA 17 a partir de las tensiones analógicas del joystick.
