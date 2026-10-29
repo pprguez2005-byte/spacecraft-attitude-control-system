@@ -6,24 +6,22 @@ Proyecto: Banco Mecatrónico TFG - Simulación Satelital
 Autor: Antigravity AI Pair Programmer
 Fecha: 28-10-2026
 ================================================================================
-Fiel reconstrucción física basada en las fotografías macro y croquis de taller:
-1. Perfilería de aluminio extruido 2020 Slot 6 (T-Slot estándar europeo):
-   - Sección transversal de 20x20 mm con chaflanes exteriores a 45° (1.0 mm)
-   - Bocas exteriores planas de 6.2 mm de luz (sin rebajes triangulares exteriores erróneos)
-   - Labios de 1.8 mm de espesor con transición interior biselada a 45°
-   - Bolsillo interior de 11.0 mm de ancho x 4.2 mm de profundidad
-   - Núcleo tubular central con taladro circular de 4.2 mm (roscable M5)
-   - 4 nervios diagonales a 45° de 1.8 mm de espesor
-2. Escuadras de 90° de fundición de aluminio (20x20x20 mm):
-   - Montadas en el exterior de las esquinas (en los peldaños de 20 mm)
-   - Dos nervios triangulares laterales de 3.0 mm de espesor
-   - Bolsillo central vaciado de 14.0 mm de ancho
-   - Dos taladros pasantes de 5.5 mm para tornillería M5
-3. Tornillería M5 con arandela (ISO 7380 / DIN 125):
-   - Cabeza alomada de 9.2 mm de diámetro x 2.6 mm con arandela plana de 10.0 mm
-   - Posiciones de tornillos modeladas según el prototipo físico real de taller,
-     reflejando fielmente las escuadras con tornillos instalados y los taladros
-     vacíos donde falta el tornillo en los travesaños horizontales.
+Reconstrucción fotorrealista exacta 1:1 según las imágenes oficiales de catálogo:
+1. Perfilería de aluminio 2020 (Captura de pantalla 2026-10-28 191135.png):
+   - Sección transversal de 20x20 mm con las 4 esquinas redondeadas (R = 1.5 mm).
+   - Bocas exteriores de 6.0 mm con labios de 1.8 mm.
+   - Cavidades interiores ensanchadas trapezoidales entre nervios a 45°.
+   - Núcleo central con taladro lobulado de 4 orejetas (cloverleaf) de M5.
+2. Escuadras de unión de 90° (Captura de pantalla 2026-10-28 191203.png):
+   - Bloque de 20x20x20 mm con 2 nervios laterales de 2.5 mm de espesor.
+   - Perfil de nervio con escalones horizontales/verticales de 3.5 mm y pendiente a 45°.
+   - Bolsillo central vaciado de 15 mm de anchura.
+   - Colisos pasantes (ranuras ovaladas) de 5.3 x 9.5 mm en base y pared vertical.
+3. Tornillería DIN 912 / ISO 4762 Allen M5 con arandela ancha:
+   - Tornillo cilíndrico de cabeza Allen (diámetro 8.5 mm, altura 5.0 mm, hexágono de 4 mm).
+   - Arandela ancha de diámetro 11.5 mm x 1.0 mm de espesor.
+   - Reflejo fiel del prototipo físico: 4 tornillos en montantes verticales y
+     orificios libres (coliso vacío sin tornillo) en las escuadras con tornillo faltante.
 ================================================================================
 """
 
@@ -32,182 +30,183 @@ import sys
 from build123d import *
 
 # ------------------------------------------------------------------------------
-# 1. Definición de la Sección Transversal Real 2020
+# 1. Definición de la Sección Transversal Real 2020 de Catálogo
 # ------------------------------------------------------------------------------
-def create_true_2020_sketch():
-    """Genera el sketch 2D exacto del perfil 2020 T-Slot normalizado"""
+def create_catalog_2020_sketch():
+    """Genera el sketch 2D exacto del perfil 2020 de catálogo"""
     with BuildSketch() as s:
-        # Cuadrado envolvente 20x20 mm
+        # Cuadrado 20x20 mm con esquinas exteriores redondeadas R = 1.5 mm
         Rectangle(20.0, 20.0)
-        # Chaflanes a 45° en las cuatro esquinas exteriores (como se aprecia en la macro)
-        chamfer(s.vertices(), length=1.0)
-        
-        # 4 ranuras T-slot simétricas
+        fillet(s.vertices(), radius=1.5)
+
         for angle in [0, 90, 180, 270]:
             with Locations(Rotation(0, 0, angle)):
-                # Boca de entrada exterior: 6.2 mm de ancho x 2.0 mm (de y = 8.1 a 10.1)
+                # Boca de 6.0 mm (de x = -3.0 a +3.0) con labio de 1.8 mm
                 with Locations((0, 9.1)):
-                    Rectangle(6.2, 2.0, mode=Mode.SUBTRACT)
-                # Cavidad interior ensanchada: 11.0 mm de ancho x 4.2 mm de profundidad
-                with Locations((0, 6.1)):
-                    Rectangle(11.0, 4.2, mode=Mode.SUBTRACT)
-                # Biseles interiores de los labios a 45°
-                with Locations((-3.1, 8.2)):
-                    Triangle(a=1.2, b=1.2, C=90, rotation=180, mode=Mode.SUBTRACT)
-                with Locations((3.1, 8.2)):
-                    Triangle(a=1.2, b=1.2, C=90, rotation=270, mode=Mode.SUBTRACT)
+                    Rectangle(6.0, 1.8, mode=Mode.SUBTRACT)
+                
+                # Cavidad interior ensanchada trapezoidal (entre nervios a 45°)
+                with BuildLine(mode=Mode.SUBTRACT) as bl:
+                    Line((-2.8, 3.6), (2.8, 3.6))
+                    Line((2.8, 3.6), (5.6, 8.2))
+                    Line((5.6, 8.2), (-5.6, 8.2))
+                    Line((-5.6, 8.2), (-2.8, 3.6))
+                make_face(mode=Mode.SUBTRACT)
 
-        # Taladro circular del núcleo central de 4.2 mm de diámetro (M5)
+        # Taladro central lobulado M5 de 4 orejetas (cloverleaf)
         Circle(radius=2.1, mode=Mode.SUBTRACT)
+        for angle in [0, 90, 180, 270]:
+            with Locations(Rotation(0, 0, angle)):
+                with Locations((0, 2.2)):
+                    Circle(radius=0.9, mode=Mode.SUBTRACT)
 
     return s.sketch
 
 def create_2020_profile_extrusion(length):
     """Extruye el perfil 2020 a lo largo del eje Z"""
     with BuildPart() as p:
-        insert(create_true_2020_sketch())
+        insert(create_catalog_2020_sketch())
         extrude(amount=length)
     return p.part
 
 # ------------------------------------------------------------------------------
-# 2. Escuadra de Fundición de Aluminio de 90° (20x20x20 mm)
+# 2. Escuadra de 90° con Nervios y Colisos (20x20x20 mm)
 # ------------------------------------------------------------------------------
-def create_die_cast_bracket():
+def create_catalog_bracket():
     """
-    Escuadra de fundición de aluminio 20x20x20 mm:
-    - Base en Z=0 (X de 0 a 20 mm, Y de -10 a +10 mm, espesor 3 mm)
-    - Pared trasera en X=0 (Z de 0 a 20 mm, Y de -10 a +10 mm, espesor 3 mm)
-    - Dos nervios laterales triangulares de 3 mm de espesor (Y de -10 a -7 y de 7 a 10)
-    - Vaciado central de 14 mm de ancho (Y de -7 a +7 mm)
-    - Taladro de 5.5 mm en la base horizontal (en X = 9.5 mm, Y = 0)
-    - Taladro de 5.5 mm en la pared vertical (en Z = 9.5 mm, Y = 0)
+    Escuadra de 90° con nervios laterales y colisos (ranuras ovaladas):
+    - Dimensiones envolventes: 20x20x20 mm
+    - 2 nervios laterales de 2.5 mm de espesor con escalón de 3.5 mm
+    - Bolsillo central de 15 mm de ancho
+    - Coliso pasante de 5.3 x 9.5 mm en la base horizontal
+    - Coliso pasante de 5.3 x 9.5 mm en la pared vertical
     """
     with BuildPart() as b:
-        # Prisma triangular macizo base (20x20x20 mm, centrado en Y de -10 a +10)
         with BuildSketch(Plane.XZ) as s:
             with BuildLine() as l:
                 Line((0, 0), (20, 0))
-                Line((20, 0), (0, 20))
+                Line((20, 0), (20, 3.5))
+                Line((20, 3.5), (16.5, 3.5))
+                Line((16.5, 3.5), (3.5, 16.5))
+                Line((3.5, 16.5), (3.5, 20))
+                Line((3.5, 20), (0, 20))
                 Line((0, 20), (0, 0))
             make_face()
         extrude(amount=10, both=True)
 
-        # Vaciado del bolsillo central entre los nervios (ancho = 14 mm, de Y = -7 a +7)
         with BuildSketch(Plane.XZ) as s_pocket:
             with BuildLine() as lp:
-                Line((3.0, 3.0), (17.0, 3.0))
-                Line((17.0, 3.0), (3.0, 17.0))
-                Line((3.0, 17.0), (3.0, 3.0))
+                Line((3.0, 3.0), (21.0, 3.0))
+                Line((21.0, 3.0), (21.0, 21.0))
+                Line((21.0, 21.0), (3.0, 21.0))
+                Line((3.0, 21.0), (3.0, 3.0))
             make_face()
-        extrude(amount=7, both=True, mode=Mode.SUBTRACT)
+        extrude(amount=7.5, both=True, mode=Mode.SUBTRACT)
 
-        # Taladro pasante de 5.5 mm en la base horizontal (para tornillo M5)
-        with Locations((9.5, 0, 0)):
-            Cylinder(radius=2.75, height=10.0, mode=Mode.SUBTRACT)
+        # Coliso en base horizontal (ancho 5.3 mm, longitud 9.5 mm)
+        with BuildSketch(Plane.XY) as s_slot_base:
+            with Locations((10.5, 0)):
+                SlotCenterToCenter(center_separation=4.0, height=5.3)
+        extrude(amount=10.0, both=True, mode=Mode.SUBTRACT)
 
-        # Taladro pasante de 5.5 mm en la pared vertical (para tornillo M5)
-        with Locations((0, 0, 9.5)):
-            Rotation(0, 90, 0) * Cylinder(radius=2.75, height=10.0, mode=Mode.SUBTRACT)
+        # Coliso en pared vertical (ancho 5.3 mm, longitud 9.5 mm)
+        with BuildSketch(Plane.YZ) as s_slot_vert:
+            with Locations((0, 10.5)):
+                SlotCenterToCenter(center_separation=4.0, height=5.3, rotation=90)
+        extrude(amount=10.0, both=True, mode=Mode.SUBTRACT)
 
     return b.part
 
 # ------------------------------------------------------------------------------
-# 3. Tornillo M5 con Arandela (Pan-Head ISO 7380 / DIN 7985)
+# 3. Tornillo Allen Cilíndrico DIN 912 M5 con Arandela Ancha
 # ------------------------------------------------------------------------------
-def create_m5_screw_with_washer():
+def create_din912_screw():
     """
-    Crea el conjunto de tornillo M5 de cabeza alomada con arandela plana DIN 125:
-    - Arandela: diámetro exterior 10.0 mm, espesor 1.0 mm
-    - Cabeza alomada: diámetro 9.2 mm, altura 2.6 mm
-    - Espárrago roscado: diámetro 4.9 mm, longitud 8.0 mm
+    Tornillo DIN 912 M5 con arandela ancha DIN 9021:
+    - Arandela: diámetro 11.5 mm, espesor 1.0 mm
+    - Cabeza cilíndrica: diámetro 8.5 mm, altura 5.0 mm
+    - Alojamiento hexagonal Allen de 4.0 mm
+    - Espárrago roscado M5
     """
     with BuildPart() as p:
-        # Arandela DIN 125
-        Cylinder(radius=5.0, height=1.0)
-        # Cabeza alomada mediante revolución
-        with BuildSketch(Plane.XZ) as s:
-            with BuildLine() as l:
-                Line((0, 1.0), (4.6, 1.0))
-                Line((4.6, 1.0), (4.6, 2.0))
-                ThreePointArc((4.6, 2.0), (3.0, 3.5), (0, 3.5))
-                Line((0, 3.5), (0, 1.0))
-            make_face()
-        revolve(axis=Axis.Z)
+        # Arandela ancha DIN 9021
+        Cylinder(radius=5.75, height=1.0)
+        # Cabeza cilíndrica DIN 912 con hexágono interior Allen
+        with Locations((0, 0, 1.0)):
+            Cylinder(radius=4.25, height=5.0)
+            with BuildSketch(Plane.XY) as s_hex:
+                with Locations((0, 0)):
+                    RegularPolygon(radius=2.3094, side_count=6)
+            extrude(amount=3.0, both=False, mode=Mode.SUBTRACT)
         # Espárrago roscado M5
-        with Locations((0, 0, -4.0)):
-            Cylinder(radius=2.45, height=8.0)
+        with Locations((0, 0, -5.0)):
+            Cylinder(radius=2.45, height=10.0)
     return p.part
 
 # ------------------------------------------------------------------------------
-# 4. Construcción del Bastidor Completo
+# 4. Construcción del Bastidor Completo 1:1
 # ------------------------------------------------------------------------------
 def build_real_frame():
     parts = []
 
-    print("Construyendo perfiles 2020 con sección fotorrealista T-Slot...")
-    # 1. Columna Izquierda (Longitud 500 mm en vertical Z)
-    # Centrada en X = -260 mm (de X = -270 a -250 mm, Y de -10 a +10 mm)
+    print("Construyendo perfiles 2020 con sección de catálogo lobulada...")
+    # Columnas verticales (2 unidades de 500 mm en Z)
+    # Columna Izquierda: X centrada en -260 mm (de X=-270 a -250), Z de 0 a 500
     col_izq = Pos(-260, 0, 0) * create_2020_profile_extrusion(500)
     parts.append(col_izq)
 
-    # 2. Columna Derecha (Longitud 500 mm en vertical Z)
-    # Centrada en X = +260 mm (de X = +250 a 270 mm, Y de -10 a +10 mm)
+    # Columna Derecha: X centrada en +260 mm (de X=250 a 270), Z de 0 a 500
     col_der = Pos(260, 0, 0) * create_2020_profile_extrusion(500)
     parts.append(col_der)
 
-    # 3. Travesaño Superior (Longitud 500 mm en horizontal X)
-    # Entre X = -250 mm y X = +250 mm (luz interior de 500 mm)
-    # Centrado en Z = 470 mm (cara inferior a 460 mm, superior a 480 mm)
+    # Travesaños horizontales (2 unidades de 500 mm en X, de X=-250 a +250)
+    # Travesaño Superior: Z centrado en 470 mm (de Z=460 a 480)
     trav_sup = Pos(-250, 0, 470) * (Rotation(0, 90, 0) * create_2020_profile_extrusion(500))
     parts.append(trav_sup)
 
-    # 4. Travesaño Inferior (Longitud 500 mm en horizontal X)
-    # Entre X = -250 mm y X = +250 mm
-    # Centrado en Z = 30 mm (cara inferior a 20 mm, superior a 40 mm)
+    # Travesaño Inferior: Z centrado en 30 mm (de Z=20 a 40)
     trav_inf = Pos(-250, 0, 30) * (Rotation(0, 90, 0) * create_2020_profile_extrusion(500))
     parts.append(trav_inf)
 
-    # --------------------------------------------------------------------------
-    # 5. Escuadras de fundición de aluminio en las 4 esquinas exteriores
-    # --------------------------------------------------------------------------
-    bracket_base = create_die_cast_bracket()
-    screw_base = create_m5_screw_with_washer()
+    # Escuadras con colisos en las 4 esquinas exteriores
+    bracket_base = create_catalog_bracket()
+    screw_base = create_din912_screw()
 
-    # Escuadra Superior Izquierda (TL):
-    # Apoya en Z = 480 mm sobre el travesaño superior, adosada a la columna en X = -250 mm
+    # 1. Escuadra Superior Izquierda (TL):
+    # Apoya en Z = 480 mm sobre el travesaño, pared vertical en X = -250 mm
     esc_sup_izq = Pos(-250, 0, 480) * bracket_base
     parts.append(esc_sup_izq)
     # Tornillo Columna TL:
-    parts.append(Pos(-247, 0, 489.5) * (Rotation(0, -90, 0) * screw_base))
+    parts.append(Pos(-247, 0, 490.5) * (Rotation(0, -90, 0) * screw_base))
     # Tornillo Travesaño TL:
-    parts.append(Pos(-240.5, 0, 483) * (Rotation(180, 0, 0) * screw_base))
+    parts.append(Pos(-239.5, 0, 483) * (Rotation(180, 0, 0) * screw_base))
 
-    # Escuadra Superior Derecha (TR):
-    # Apoya en Z = 480 mm sobre el travesaño, adosada a la columna en X = +250 mm
+    # 2. Escuadra Superior Derecha (TR):
+    # Apoya en Z = 480 mm sobre el travesaño, pared vertical en X = +250 mm
     esc_sup_der = Pos(250, 0, 480) * mirror(bracket_base, about=Plane.YZ)
     parts.append(esc_sup_der)
     # Tornillo Columna TR:
-    parts.append(Pos(247, 0, 489.5) * (Rotation(0, 90, 0) * screw_base))
+    parts.append(Pos(247, 0, 490.5) * (Rotation(0, 90, 0) * screw_base))
     # NOTA: En la escuadra TR, el tornillo horizontal del travesaño está FALTANTE
-    # en el prototipo físico de taller (orificio de 5.5 mm libre).
+    # en el prototipo físico de taller (coliso de 5.3 x 9.5 mm abierto y libre).
 
-    # Escuadra Inferior Izquierda (BL):
-    # Apoya bajo el travesaño en Z = 20 mm, adosada a la columna en X = -250 mm
+    # 3. Escuadra Inferior Izquierda (BL):
+    # Apoya bajo el travesaño en Z = 20 mm, pared vertical en X = -250 mm
     esc_inf_izq = Pos(-250, 0, 20) * mirror(bracket_base, about=Plane.XY)
     parts.append(esc_inf_izq)
     # Tornillo Columna BL:
-    parts.append(Pos(-247, 0, 10.5) * (Rotation(0, -90, 0) * screw_base))
+    parts.append(Pos(-247, 0, 9.5) * (Rotation(0, -90, 0) * screw_base))
     # NOTA: En la escuadra BL, el tornillo horizontal del travesaño está FALTANTE
-    # en el prototipo físico de taller (orificio de 5.5 mm libre).
+    # en el prototipo físico de taller (coliso de 5.3 x 9.5 mm abierto y libre).
 
-    # Escuadra Inferior Derecha (BR):
-    # Apoya bajo el travesaño en Z = 20 mm, adosada a la columna en X = +250 mm
+    # 4. Escuadra Inferior Derecha (BR):
+    # Apoya bajo el travesaño en Z = 20 mm, pared vertical en X = +250 mm
     esc_inf_der = Pos(250, 0, 20) * mirror(mirror(bracket_base, about=Plane.YZ), about=Plane.XY)
     parts.append(esc_inf_der)
     # Tornillo Columna BR:
-    parts.append(Pos(247, 0, 10.5) * (Rotation(0, 90, 0) * screw_base))
+    parts.append(Pos(247, 0, 9.5) * (Rotation(0, 90, 0) * screw_base))
     # Tornillo Travesaño BR:
-    parts.append(Pos(240.5, 0, 17) * screw_base)
+    parts.append(Pos(239.5, 0, 17) * screw_base)
 
     ensamblaje = Compound(children=parts)
     print(f"Ensamblaje completado con {len(parts)} piezas sólidas independientes.")

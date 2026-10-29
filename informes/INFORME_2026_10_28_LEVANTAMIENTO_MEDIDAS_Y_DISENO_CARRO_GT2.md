@@ -152,16 +152,20 @@ Se han desarrollado y versionado los siguientes modelos y scripts en el reposito
 7. **Modelo 3D Directo en Formato CAD Abierto ([`Fusion/Banco_Mecatronico_TFG.obj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Banco_Mecatronico_TFG.obj)):**
    - Exportación de la geometría completa del ensamblaje (bastidor base $540 \times 500\text{ mm}$, 5 perfiles longitudinales de $600\text{ mm}$, eje transversal $540\text{ mm}$, soportes de motor/tensor y carro móvil V-Wheel) en formato `.obj` 1:1 listo para arrastrar y soltar directamente en Fusion 360.
 8. **Generación de Sólido B-Rep STEP Oficial del Bastidor Real 1:1 ([`Fusion/Marco_Real_2020_TFG.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Fusion/Marco_Real_2020_TFG.step)):**
-   - **Corrección Geométrica de Máxima Fidelidad de la Sección del Perfil 2020 (Foto Macro):**
-     - A partir de la fotografía macro [`fotos medidas/WhatsApp Image 2026-10-28 at 17.09.52 (3).jpeg`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/fotos%20medidas/WhatsApp%20Image%202026-10-28%20at%2017.09.52%20(3).jpeg), se ha eliminado completamente el bisel triangular exterior erróneo de las versiones previas.
-     - **Geometría real:** Cuadrado exterior de $20 \times 20\text{ mm}$ con **chaflanes planos a $45^\circ$ ($1{,}0\text{ mm}$)** en las 4 esquinas exteriores, caras perimetrales exteriores completamente planas, bocas de ranura de **$6{,}2\text{ mm}$**, labios de $1{,}8\text{ mm}$ de grosor con transición biselada interna a $45^\circ$, cavidad interior ensanchada de **$11{,}0\text{ mm}$ de ancho $\times 4{,}2\text{ mm}$ de fondo**, núcleo central tubular con taladro circular de **$\varnothing 4{,}2\text{ mm}$ (roscable a M5)** y 4 nervios diagonales a $45^\circ$ de $1{,}8\text{ mm}$ de espesor.
-   - **Escuadras de Fundición de Aluminio de 90° ($20 \times 20 \times 20\text{ mm}$):**
-     - Geometría fiel con base de $3\text{ mm}$, respaldo de $3\text{ mm}$, **dos nervios triangulares laterales de $3\text{ mm}$**, **bolsillo central vaciado de $14\text{ mm}$ de anchura** y dos taladros pasantes de $\varnothing 5{,}5\text{ mm}$ para tornillería M5.
-   - **Auditoría y Reproducción Física de la Tornillería M5 (Reflejo de Tornillos Faltantes):**
-     - Siguiendo la observación del usuario en taller (*"hay algunas que les falta un tornillo"*):
-       - Los tornillos instalados son de cabeza alomada (pan-head ISO 7380) de $\varnothing 9{,}2\text{ mm}$ con arandela plana DIN 125 de $\varnothing 10{,}0\text{ mm}$.
-       - **Columnas Verticales:** Las 4 escuadras cuentan con su tornillo M5 fijado firmemente a la ranura de la columna vertical.
-       - **Travesaños Horizontales:** En las escuadras superior derecha (TR) e inferior izquierda (BL), el tornillo horizontal no está instalado, dejando el taladro pasante de $\varnothing 5{,}5\text{ mm}$ completamente abierto y visible, reproduciendo al 100% el estado físico exacto del prototipo de taller.
+   - **Corrección Geométrica de Máxima Fidelidad según Catálogo Oficial ([`Captura de pantalla 2026-10-28 191135.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/fotos%20medidas/Captura%20de%20pantalla%202026-10-28%20191135.png)):**
+     - **Esquinas exteriores:** Redondeadas con radio de **$R = 1{,}5\text{ mm}$** (eliminando definitivamente los chaflanes planos a 45°).
+     - **Bocas y labios:** Bocas exteriores de **$6{,}0\text{ mm}$** de luz, labios de $1{,}8\text{ mm}$ de grosor con caras inferiores planas.
+     - **Cavidades interiores:** Vaciados trapezoidales ensanchados entre los 4 nervios diagonales a $45^\circ$.
+     - **Núcleo central lobulado en trébol (*cloverleaf*):** Taladro central circular de $\varnothing 4{,}2\text{ mm}$ con **4 orejetas semicirculares** orientadas hacia las 4 ranuras exteriores, permitiendo el guiado del macho de roscar M5 y el desalojo de viruta exactamente como en la extrusión industrial real.
+   - **Escuadras de Catálogo Oficial de 90° ([`Captura de pantalla 2026-10-28 191203.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/fotos%20medidas/Captura%20de%20pantalla%202026-10-28%20191203.png)):**
+     - Geometría de $20 \times 20 \times 20\text{ mm}$ con **dos nervios laterales de $2{,}5\text{ mm}$ de grosor**, escalón vertical superior de $3{,}5\text{ mm}$, escalón horizontal inferior de $3{,}5\text{ mm}$ y pendiente intermedia a $45^\circ$.
+     - Vaciado central de **$15{,}0\text{ mm}$ de anchura**.
+     - **Colisos pasantes (ranuras ovaladas):** Orificios alargados de **$5{,}3\text{ mm}$ de anchura $\times 9{,}5\text{ mm}$ de longitud** con remates semicilíndricos tanto en la base horizontal como en el respaldo vertical.
+   - **Tornillería Cilíndrica Allen DIN 912 y Auditoría de Tornillos Faltantes:**
+     - **Tornillos DIN 912 / ISO 4762 M5:** Cabeza cilíndrica de $\varnothing 8{,}5\text{ mm} \times 5{,}0\text{ mm}$ de altura con alojamiento hexagonal interior (*llave Allen de $4\text{ mm}$*) y arandela ancha DIN 9021 de $\varnothing 11{,}5\text{ mm} \times 1{,}0\text{ mm}$.
+     - **Estado de fijación real de taller:**
+       - Las 4 escuadras cuentan con su tornillo Allen DIN 912 fijado a la columna vertical.
+       - En los travesaños horizontales (escuadras TR y BL), el tornillo no está colocado, dejando el **coliso ovalado de $5{,}3 \times 9{,}5\text{ mm}$ completamente abierto y libre**, coincidiendo al 100% con la observación del usuario en el taller.
    - **Posicionamiento Estricto según las Fotografías y Cuaderno:**
      - **Superiores:** Apoyadas en $Z = 480\text{ mm}$ hasta $Z = 500\text{ mm}$, enrasadas con la cara superior de las columnas.
      - **Inferiores:** Debajo del travesaño inferior (de $Z = 0\text{ mm}$ a $Z = 20\text{ mm}$), actuando como patas y dejando el vano de $500 \times 420\text{ mm}$ totalmente libre.
