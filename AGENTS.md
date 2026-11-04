@@ -54,6 +54,11 @@
    - Todas las sesiones previas se archivan en `backups/`.
    - Al término de cada día trabajado, o cada vez que el usuario lo solicite expresamente, es obligatorio generar un backup de `DESARROLLO_TFG/` en `backups/backup_YYYY_MM_DD` (o comprimido en `.zip`).
 
+10. **DISEÑO Y AUTOMATIZACIÓN 3D EN AUTODESK INVENTOR MEDIANTE SCRIPTS DE PYTHON (MANDATO EXPRESO):**
+   - **Todo diseño 3D, modelado paramétrico de piezas (`.ipt`), generación de ensamblajes (`.iam`), aplicación de aspectos/materiales, posicionamiento de componentes y exportación de archivos que se desarrolle con Inteligencia Artificial (IA) para Autodesk Inventor DEBE REALIZARSE OBLIGATORIAMENTE A TRAVÉS DE SCRIPTS DE PYTHON.**
+   - Se utilizará inexcusablemente la API nativa de Autodesk (`adsk.inventor` de Inventor 2027 PythonBindings) de manera automatizada, determinista, paramétrica y auditable, residiendo siempre en [`Parte mecanica/Inventor/scripts/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/).
+   - Queda terminantemente prohibido cualquier modelado manual o intervención que no quede registrada en un script ejecutable de Python capaz de regenerar el modelo 3D desde cero.
+
 ---
 
 ## 📌 2. Visión General del Proyecto (TFG)

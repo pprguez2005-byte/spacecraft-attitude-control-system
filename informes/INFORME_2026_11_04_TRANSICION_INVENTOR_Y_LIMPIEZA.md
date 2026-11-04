@@ -151,6 +151,26 @@ Conforme a la instrucción y croquis manuscrito aportado por el usuario (`upload
 - Apoyados directamente sobre la cara superior plana de ambas cintas transportadoras ($Y_{apoyo} = 508{,}0\text{ mm}$, centro del perfil en $Y = 518{,}0\text{ mm}$), cruzando de $X = -270\text{ mm}$ a $X = +270\text{ mm}$.
 - Distribución longitudinal uniforme en $Z$: $Z = -120\text{ mm}, -40\text{ mm}, +40\text{ mm}, +120\text{ mm}$.
 
+#### E. Asignación de Aspectos Metálicos Realistas en Autodesk Inventor
+Siguiendo las directivas cromáticas y de materiales solicitadas por el usuario, se implementó en la API la vinculación con la librería `Autodesk Biblioteca de aspecto` para conferir una diferenciación visual inmediata entre subsistemas mecánicos:
+- **Engranajes Rectos 1:1 (`Engranaje_Recto_1a1_m1_Z20.ipt`):** Aspecto metálico **`Oro`** asignado a todos los cuerpos sólidos de la pieza, resaltando el dentado de evolvente de 20 dientes.
+- **Cintas Transportadoras Dentadas (`Cinta_Transportadora_20mm_L500.ipt`):** Aspecto metálico negro **`Anodizado - Negro`** aplicado a los bucles cerrados y sus dientes internos.
+- **Motor NEMA 17 (`Motor_NEMA17.ipt`):** Aspecto metálico pulido **`Aluminio - Pulido`** asignado al cuerpo del estátor y eje motriz.
+
+#### F. Mandato Operativo de Diseño 3D en Autodesk Inventor Mediante Scripts de Python
+Se incorporó de forma vinculante e inviolable en [`AGENTS.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/AGENTS.md) (Regla 10), [`openspec/config.yaml`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/config.yaml) y [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) la siguiente directiva:
+> **Todo diseño 3D, modelado paramétrico de piezas (`.ipt`), ensamblajes (`.iam`), asignación de aspectos/materiales, posicionamiento de componentes y exportación que se realice con Inteligencia Artificial para Autodesk Inventor DEBE REALIZARSE OBLIGATORIAMENTE A TRAVÉS DE SCRIPTS DE PYTHON con la API nativa `adsk.inventor` (Inventor 2027 PythonBindings).**  
+> Queda terminantemente prohibido cualquier modelado manual o intervención fuera de código auditable y reproducible.
+
+#### G. Protocolo y Entregables para Visualización y Compartición de Modelos 3D
+Ante la necesidad de compartir el modelo 3D con terceros (tutores, evaluadores o colaboradores), se determinó el protocolo estándar de entrega de proyectos CAD:
+1. **Archivo Universal para Visualización Inmediata sin Software CAD:**
+   - **Archivo:** [`Banco_Mecatronico_Cubo_50x54.step`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.step) ($640\text{ KB}$, formato STEP AP214/AP242).
+   - **Ventaja:** Es un archivo único y autosuficiente. Cualquier persona puede abrirlo arrastrándolo directamente en [Autodesk Viewer](https://viewer.autodesk.com/) desde cualquier navegador web (Chrome, Edge, Safari) en PC, tablet o móvil, **sin instalar ningún programa ni pagar licencias**, con herramientas completas de órbita 3D, despiece explotado, planos de corte y medición. Asimismo, es directamente compatible con SolidWorks, CATIA, Fusion 360, FreeCAD, AutoCAD y Onshape.
+2. **Paquete Nativo Portable para Usuarios de Autodesk Inventor:**
+   - **Archivo:** [`Banco_Mecatronico_Inventor_Completo.zip`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/Banco_Mecatronico_Inventor_Completo.zip) ($1{,}30\text{ MB}$).
+   - **Ventaja:** En Autodesk Inventor, un archivo de ensamblaje `.iam` no contiene la geometría en su interior (solo guarda referencias y restricciones hacia los archivos de pieza `.ipt`). Mandar únicamente el archivo `.iam` provocaría errores de *piezas no encontradas*. El archivo ZIP contiene el proyecto `.ipj`, la carpeta `piezas/` con todos los `.ipt`, y la carpeta `ensamblajes/` con los `.iam`, permitiendo a otro usuario de Inventor abrir el ensamblaje completo con su árbol paramétrico de operaciones íntegro.
+
 ---
 
 ## 5. Verificación Visual del Ensamblaje en Autodesk Inventor 2027
