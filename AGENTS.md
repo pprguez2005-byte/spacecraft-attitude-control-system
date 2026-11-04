@@ -34,9 +34,10 @@
    - En [`openspec/context/CONTEXTO_GENERAL.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/openspec/context/CONTEXTO_GENERAL.md) se mantiene el resumen ejecutivo permanente con todo lo importante del proyecto.
    - Al cerrar o cambiar de etapa, se actualiza dicho archivo para conservar la memoria acumulada sesión a sesión.
 
-6. **INFORME PROFESIONAL DE INGENIERÍA CONTINUO E INCREMENTAL (EN TIEMPO REAL):**
+6. **INFORME PROFESIONAL DE INGENIERÍA CONTINUO, INCREMENTAL Y ACUMULATIVO (EN TIEMPO REAL):**
    - **Prohibido esperar al cierre del día:** El informe técnico profesional de la jornada en [`informes/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/) se genera y edita **de manera continua y progresiva en tiempo real a medida que se va trabajando**.
-   - Tras cada avance significativo (decisión técnica, desarrollo de código, formulación matemática, modificación CAD o configuración de OpenSpec), el agente debe actualizar y versionar inmediatamente el informe del día (`INFORME_YYYY_MM_DD_...md`).
+   - **Carácter Acumulativo Total (Evolutivo Completo):** Cada nuevo informe diario (`INFORME_YYYY_MM_DD_...md`) **debe heredar e incluir obligatoriamente todo el contenido histórico y avances de los informes anteriores**, sumando de forma estructurada los desarrollos del día presente. De este modo, el informe de cada jornada contiene la memoria íntegra del proyecto acumulada hasta esa fecha (el de hoy contiene lo anterior + lo de hoy; el de mañana contendrá todo lo previo + lo de mañana), garantizando que el último informe sea siempre un borrador integral y autosuficiente de la memoria final del TFG.
+   - Tras cada avance significativo (decisión técnica, desarrollo de código, formulación matemática, modificación CAD o configuración de OpenSpec), el agente debe actualizar y versionar inmediatamente el informe del día.
    - Debe reflejar con rigor de nivel de TFG: justificación física/matemática, fragmentos de código comentados, esquemas, gráficas, diagramas (Mermaid/PNG) y conclusiones intermedias, garantizando que jamás se pierda el registro por olvido o interrupción de sesión.
 
 7. **LECTURA OBLIGATORIA AL INICIAR CADA SESIÓN:**
@@ -153,3 +154,15 @@ TFG/
 - [x] **27/10/2026:** Reestructuración de la arquitectura de directorios de `TFG/`: eliminación de la división por carpetas diarias, establecimiento de `DESARROLLO_TFG/` como carpeta de trabajo fija y permanente, y archivo de sesiones históricas (`09_10_26` a `27_10_26`) en `backups/`.
 - [x] **27/10/2026:** Establecimiento del protocolo obligatorio de backups automatizados diarios o bajo demanda.
 - [x] **27/10/2026:** Directiva de **Informe Profesional Continuo e Incremental (en tiempo real)**: Prohibido esperar al final del día para redactar el informe; debe crearse y actualizarse dinámicamente con cada desarrollo, cálculo o hito para evitar pérdida de información.
+
+### Sesión 28/10/2026
+- [x] **28/10/2026:** Levantamiento dimensional del bastidor base real de taller ($500\text{ mm}$ de luz interior, $540\text{ mm}$ exterior, $500\text{ mm}$ de altura en perfil 2020 con escuadras de 90°).
+- [x] **28/10/2026:** Selección de cinemática para el carro transversal por correa síncrona GT2 ($2\text{ mm}$ paso, avance $40\text{ mm/vuelta}$) y guiado por ruedas V-Wheel de POM con espaciadores excéntricos.
+- [x] **28/10/2026:** Integración en Fusion 360 y exportación de modelos B-Rep STEP oficiales 1:1 (`Marco_Real_2020_TFG.step`, `Banco_Mecatronico_TFG.step`), modelos STL/OBJ y visor WebGL.
+
+### Sesión 03/11/2026
+- [x] **03/11/2026:** Definición de arquitectura de control bidireccional (CW/CCW) mediante `DIR` y `STEP` con microcontrolador ESP32.
+- [x] **03/11/2026:** Selección de driver de potencia Trinamic TMC2209 con modo *StealthChop2* a 256 micropasos para evitar la inducción de armónicos parásitos sobre el péndulo.
+- [x] **03/11/2026:** Cálculo dinámico y comprobación de par motor para velocidad de cinta $v = 0{,}5\text{ m/s}$ ($750\text{ rpm}$ en polea GT2-20T, $\tau_{req} \approx 0{,}022\text{ N}\cdot\text{m}$ frente a $\tau_{disp} \approx 0{,}12\text{ N}\cdot\text{m}$, margen $> 5\times$).
+- [x] **03/11/2026:** Parametrización en Fusion 360 del tren de engranajes rectos en relación 1:1 ($Z_1 = 20, Z_2 = 20$, módulo $m = 1{,}0\text{ mm}$, espesor $b = 7{,}00\text{ mm}$, *backlash* $0{,}20\text{ mm}$, eje $5{,}00\text{ mm}$, distancia entre centros $20{,}00\text{ mm}$).
+

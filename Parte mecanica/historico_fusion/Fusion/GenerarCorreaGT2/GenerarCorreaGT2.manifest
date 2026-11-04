@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"script",
+	"author":	"Antigravity TFG",
+	"description":	{
+		"":	"Generador automatico de Correa GT2 100% cerrada y solida en Fusion 360 para el banco mecatronico del TFG"
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

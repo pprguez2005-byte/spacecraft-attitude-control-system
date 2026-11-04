@@ -5,7 +5,7 @@
 > **Proyecto:** Sistema Embebido de Control de Posición Bidireccional para Orientación de Prototipos Espaciales en Microgravedad Simulada  
 > **Titulación:** Trabajo de Fin de Grado (TFG)  
 > **Directorio:** `DESARROLLO_TFG`  
-> **Última actualización:** 27/10/2026  
+> **Última actualización:** 03/11/2026  
 
 ---
 
@@ -138,8 +138,58 @@ sequenceDiagram
   - Inicialización del repositorio Git local y creación de rama `change/despliegue-satelites-joystick-seguimiento`.
   - Actualización de `AGENTS.md` y `openspec/config.yaml` incorporando la regla mandatoria de consulta obligatoria ante cualquier duda de medidas o valores.
   - Formulación formal de la propuesta OpenSpec `despliegue-satelites-joystick-esp32` con sus 4 artefactos aprobados y validados.
-  - **Proceso pausado temporalmente:** El diseño de la batería superior en Fusion 360 y selección dimensional de motores/joystick queda suspendido hasta que el usuario dé la orden de reactivación (*"seguir con el proceso de los perfiles de fusion"*). Todas las preguntas técnicas y esquemas han quedado almacenados en `design.md`.
   - Reestructuración de `TFG/`: `DESARROLLO_TFG/` como espacio de trabajo permanente y `backups/` como histórico con script `backup.ps1`.
   - Adopción de la regla de **Informe Profesional Continuo e Incremental**: redactar y editar el informe en tiempo real conforme se trabaja, sin esperar al cierre de jornada.
+
+### Sesión 28/10/2026
+- **Hitos completados:**
+  - **Levantamiento métrico real de taller:** Verificación del perfil 2020, marco base $500\text{ mm}$ de luz interior, $540\text{ mm}$ exterior y $500\text{ mm}$ de altura.
+  - **Cinemática de carro transversal:** Decisión de tracción por correa síncrona GT2 ($2\text{ mm}$ paso, avance $40\text{ mm/vuelta}$) con motor paso a paso fijo en extremo lateral y guiado por ruedas V-Wheel de POM con espaciadores excéntricos.
+  - **Artefactos 3D generados:** Soportes en OpenSCAD (`soporte_motor_nema17_2020.scad`, `soporte_tensor_idler_2020.scad`, `carro_movil_vwheel_joystick.scad`) con desacoplo de carga del hilo.
+  - **Integración oficial con Autodesk Fusion 360:** Script y add-in `GenerarBancoTFG`, exportación B-Rep oficial `Marco_Real_2020_TFG.step`, `Banco_Mecatronico_TFG.step`, modelos OBJ/STL y visor interactivo WebGL (`visor_3d_fusion.html`).
+  - **Croquis cinemático global:** Recepción del croquis isométrico definiendo el eje de distribución de par frontal motorizado (Motor 1) para avance del puente y carro transversal (Motor 2).
+
+### Sesión 03/11/2026
+- **Hitos completados:**
+  - **Arquitectura de control del ESP32:** Definición del control de giro bidireccional (CW/CCW) mediante pines `DIR` y `STEP` para el lazo servoguiado.
+  - **Selección del Driver de Potencia:** Evaluación técnica comparativa (TMC2209, TMC2208, A4988, DRV8825). Selección del **TMC2209** por su tecnología *StealthChop2* con interpolación a 256 micropasos, esencial para evitar que los armónicos del motor exciten la frecuencia del péndulo ($f_n \approx 0{,}64\text{ Hz}$).
+  - **Cálculo dinámico para velocidad lineal $v = 0{,}5\text{ m/s}$:**
+    - Régimen de giro de polea GT2-20T ($40\text{ mm/vuelta}$): $n = 750\text{ rpm}$ ($12{,}5\text{ rev/s}$).
+    - Par resistente estimado para aceleración deportiva ($a = 2\text{ m/s}^2$): $\tau \approx 0{,}022\text{ N}\cdot\text{m}$.
+    - Verificación con NEMA 17 estándar ($T_H \approx 0{,}40 - 0{,}45\text{ N}\cdot\text{m}$): A $750\text{ rpm}$ entrega $\approx 0{,}12\text{ N}\cdot\text{m}$ (factor de seguridad $> 5$).
+  - **Diseño del tren de engranajes rectos en Fusion 360:**
+    - Corrección de la anomalía de módulo imperial de Fusion 360 (`Module 12.70` $\to D_p = 304{,}8\text{ mm}$).
+    - Adopción de **relación directa 1:1** ($Z_1 = 20, Z_2 = 20$, módulo $m = 1{,}0\text{ mm}$) para mantener el motor a $750\text{ rpm}$ y evitar el calado por sobrevelocidad que provocaría una reductora.
+    - Consolidación de parámetros: $m = 1{,}0\text{ mm}$, $Z = 20$, ángulo de presión $20^\circ$, *backlash* $0{,}20\text{ mm}$, espesor $b = 7{,}00\text{ mm}$, taladro de eje $5{,}00\text{ mm}$ y distancia entre centros $a = 20{,}00\text{ mm}$.
+  - **Documentación continua:** Emisión y actualización en tiempo real de [`informes/INFORME_2026_11_03_DISENO_TRANSMISION_MOTOR_ESP32.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/INFORME_2026_11_03_DISENO_TRANSMISION_MOTOR_ESP32.md).
+
+### Sesión 04/11/2026 (Sesión Actual)
+- **Hitos completados:**
+  - **Reorganización modular del espacio de trabajo:** Desacoplo estructural entre [`Parte mecanica/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/) y [`parte electrica/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/parte%20electrica/). Reubicación del firmware del ESP32 en el dominio eléctrico y archivado limpio del entorno anterior en [`Parte mecanica/historico_fusion/`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/historico_fusion/).
+  - **Depuración de dependencias externas:** Inspección y purga de la carpeta transitoria `prueba/` tras verificar que no contenía componentes para Inventor Desktop.
+  - **Transición Oficial a Autodesk Inventor Professional 2027:**
+    - Configuración y activación del proyecto oficial de Autodesk Inventor [`Banco_Mecatronico_TFG.ipj`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/Banco_Mecatronico_TFG.ipj).
+    - Descubrimiento e integración del binding oficial de C++ de Autodesk [`adsk.inventor`](file:///C:/Program%20Files/Autodesk/Inventor%202027/Bin/PythonBindings/adsk/inventor) para automatización directa sin dependencias externas.
+  - **Generación Paramétrica del Catálogo de Piezas (.ipt):**
+    - Suite Python [`generar_piezas_ipt.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/generar_piezas_ipt.py) con encadenamiento de vértices hermético:
+      - Perfiles 2020 V-Slot parametrizados ($L = 500\text{ mm}, 540\text{ mm}, 600\text{ mm}$).
+      - Escuadra de 90° de fundición con nervios laterales y colisos M5 ($20 \times 20 \times 20\text{ mm}$).
+      - Tornillería Allen DIN 912 M5x8.
+      - Ruedas V-Wheel de POM con perfil a 90°.
+      - Placa Gantry del carro transversal ($65 \times 65\text{ mm}$) con soporte de sensor joystick y ojal para hilo.
+      - Motor NEMA 17 ($42 \times 42 \times 40\text{ mm}$, eje $\varnothing 5\text{ mm}$).
+      - Engranajes rectos de evolvente 1:1 ($Z = 20, m = 1{,}0\text{ mm}, b = 7\text{ mm}$).
+      - Polea síncrona GT2 de 20 dientes ($D_p = 12{,}73\text{ mm}$).
+      - Soporte bi-eje para NEMA 17 con distancia entre centros $a = 20{,}0\text{ mm}$.
+  - **Construcción del Modelo Oficial del Cubo (50x54 cm) en Autodesk Inventor 2027:**
+    - Script Python maestro [`generar_cubo_con_cintas.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/generar_cubo_con_cintas.py):
+      - **Geometría de alta fidelidad:** Sustitución de extrusiones simples por perfiles 2020 de catálogo B-Rep con contorno exterior redondeado ($R=1{,}5\text{ mm}$), ranuras V-Slot a $45^\circ$, núcleo lobulado *cloverleaf* M5 y nervios internos.
+      - **Escuadras enrasadas con tornillería completa:** 16 escuadras de fundición de 90° con sus caras horizontales y verticales perfectamente enrasadas contra las ranuras de los perfiles, integrando **32 tornillos Allen DIN 912 M5x8 con arandela** (2 tornillos por escuadra) alojados analíticamente en sus colisos.
+      - **Cinemática superior (croquis 04/11/2026):** Dos cintas en bucle cerrado sobre los perfiles laterales superiores, accionadas por motor NEMA 17 acoplado mediante tren de engranajes rectos 1:1 ($Z_1=Z_2=20, m=1{,}0\text{ mm}, a=20{,}0\text{ mm}$) y eje de distribución transversal de $\varnothing 5\text{ mm} \times 520\text{ mm}$ que sincroniza ambas poleas motrices GT2.
+      - **Batería móvil apoyada:** 4 perfiles transversales 2020 de $540\text{ mm}$ apoyados directamente sobre la cara superior de ambas cintas ($Y = 500\text{ mm}$), espaciados uniformemente en $Z$.
+      - **Alineación de coordenadas:** Orientación oficial con eje $Y$ vertical hacia arriba (*Y-up*), garantizando congruencia visual con el ViewCube y vistas ortogonales de Autodesk Inventor.
+    - Modelos consolidados: [`Banco_Mecatronico_Cubo_50x54.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.iam) y [`Banco_Mecatronico_TFG_Principal.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_TFG_Principal.iam).
+  - **Documentación continua:** Emisión y actualización en tiempo real de [`informes/INFORME_2026_11_04_TRANSICION_INVENTOR_Y_LIMPIEZA.md`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/informes/INFORME_2026_11_04_TRANSICION_INVENTOR_Y_LIMPIEZA.md).
+
 - **Estado actual:**
-  - Reestructuración completada: `DESARROLLO_TFG` queda establecida formalmente como la carpeta fija permanente de trabajo, con todas las sesiones históricas archivadas en `backups/` y el protocolo de copias automatizado activo. Espacio listo para la siguiente orden de trabajo.
+  - Modelo CAD completamente consolidado y verificado en Autodesk Inventor Professional 2027. Cubo de $50 \times 54\text{ cm}$ con perfiles de catálogo B-Rep, 16 escuadras con sus 32 tornillos M5, 2 cintas cerradas con motor NEMA 17, engranajes 1:1, eje de sincronización y batería de 4 perfiles apoyados. Abierto y visible en directo en la interfaz de Autodesk Inventor 2027.
