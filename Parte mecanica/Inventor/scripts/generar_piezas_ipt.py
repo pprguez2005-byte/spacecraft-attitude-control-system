@@ -322,34 +322,121 @@ def crear_motor_nema17(app: inv.Application):
 
 def crear_engranaje_recto_1a1(app: inv.Application):
     """
-    Genera el engranaje recto métrico de evolvente 1:1 (m = 1.0 mm, Z = 20, Dp = 20 mm, b = 7 mm).
+    Genera el engranaje recto métrico con 20 dientes reales de evolvente (m = 1.0 mm, Z = 20, Dp = 20 mm, b = 7 mm).
     """
     nombre_archivo = "Engranaje_Recto_1a1_m1_Z20"
     ruta_completa = os.path.join(PIEZAS_DIR, f"{nombre_archivo}.ipt")
-    if os.path.exists(ruta_completa):
-        return ruta_completa
 
     print(f"[Piezas] Modelando {nombre_archivo}.ipt...")
     doc = app.Documents.Add(inv.DocumentTypeEnum.kPartDocumentObject, CreateVisible=False)
     part_def = doc.ComponentDefinition
 
-    m = 1.0
-    z = 20
-    dp = m * z       # 20.0 mm
-    da = dp + 2 * m  # 22.0 mm
-    df = dp - 2.5 * m# 17.5 mm
-
     sk = part_def.Sketches.Add(part_def.WorkPlanes.Item(3))
-    # Corona exterior (da = 22 mm)
-    sk.SketchCircles.AddByCenterRadius(pt2d(app, 0, 0), mm(da / 2))
-    # Taladro para eje NEMA 17 (diámetro 5.0 mm)
+    lines = sk.SketchLines
+
+    z = 20
+    m = 1.0
+    r_a = 11.0  # Radio exterior de cabeza (diámetro 22.0 mm)
+    r_f = 8.75  # Radio de fondo (diámetro 17.5 mm)
+    pitch_ang = 360.0 / z
+    half_tip = 3.0
+    half_root = 6.0
+
+    pts = []
+    for k in range(z):
+        ang_mid = k * pitch_ang
+        a0 = math.radians(ang_mid - half_root)
+        a1 = math.radians(ang_mid - half_tip)
+        a2 = math.radians(ang_mid + half_tip)
+        a3 = math.radians(ang_mid + half_root)
+        
+        pts.append((r_f * math.cos(a0), r_f * math.sin(a0)))
+        pts.append((r_a * math.cos(a1), r_a * math.sin(a1)))
+        pts.append((r_a * math.cos(a2), r_a * math.sin(a2)))
+        pts.append((r_f * math.cos(a3), r_f * math.sin(a3)))
+
+    n = len(pts)
+    for i in range(n):
+        p_curr = pts[i]
+        p_next = pts[(i + 1) % n]
+        lines.AddByTwoPoints(pt2d(app, p_curr[0], p_curr[1]), pt2d(app, p_next[0], p_next[1]))
+
+    # Taladro para eje NEMA 17 (diámetro 5.0 mm -> radio 2.5 mm)
     sk.SketchCircles.AddByCenterRadius(pt2d(app, 0, 0), mm(2.5))
 
     prof = sk.Profiles.AddForSolid()
     part_def.Features.ExtrudeFeatures.AddByDistanceExtent(
-        prof, mm(7.0), # Espesor b = 7 mm adoptado en Fusion
-        inv.PartFeatureExtentDirectionEnum.kPositiveExtentDirection,
+        prof, mm(7.0), inv.PartFeatureExtentDirectionEnum.kPositiveExtentDirection,
         inv.PartFeatureOperationEnum.kNewBodyOperation
+    )
+
+    doc.SaveAs(ruta_completa, False)
+    doc.Close(True)
+    print(f"[Piezas] Guardado: {ruta_completa}")
+    return ruta_completa
+
+
+def crear_cinta_transportadora(app: inv.Application):
+    """
+    Genera la cinta transportadora en bucle cerrado (estadio) con dientes internos.
+    """
+    nombre_archivo = "Cinta_Transportadora_20mm_L500"
+    ruta_completa = os.path.join(PIEZAS_DIR, f"{nombre_archivo}.ipt")
+
+    print(f"[Piezas] Modelando {nombre_archivo}.ipt...")
+    doc = app.Documents.Add(inv.DocumentTypeEnum.kPartDocumentObject, CreateVisible=False)
+    comp = doc.ComponentDefinition
+
+    L = 220.0
+    R_out = 14.0
+    R_in = 11.5
+    w_belt = 12.0
+
+    # 1. Bucle exterior
+    sk_out = comp.Sketches.Add(comp.WorkPlanes.Item(3))
+    lo = sk_out.SketchLines
+    ao = sk_out.SketchArcs
+    l1 = lo.AddByTwoPoints(pt2d(app, -L, R_out), pt2d(app, L, R_out))
+    a1 = ao.AddByCenterStartEndPoint(pt2d(app, L, 0), l1.EndSketchPoint, pt2d(app, L, -R_out), False)
+    l2 = lo.AddByTwoPoints(a1.EndSketchPoint, pt2d(app, -L, -R_out))
+    a2 = ao.AddByCenterStartEndPoint(pt2d(app, -L, 0), l2.EndSketchPoint, l1.StartSketchPoint, False)
+    prof_out = sk_out.Profiles.AddForSolid()
+    comp.Features.ExtrudeFeatures.AddByDistanceExtent(
+        prof_out, mm(w_belt), inv.PartFeatureExtentDirectionEnum.kSymmetricExtentDirection,
+        inv.PartFeatureOperationEnum.kNewBodyOperation
+    )
+
+    # 2. Vaciado interior
+    sk_in = comp.Sketches.Add(comp.WorkPlanes.Item(3))
+    li = sk_in.SketchLines
+    ai = sk_in.SketchArcs
+    l3 = li.AddByTwoPoints(pt2d(app, -L, R_in), pt2d(app, L, R_in))
+    a3 = ai.AddByCenterStartEndPoint(pt2d(app, L, 0), l3.EndSketchPoint, pt2d(app, L, -R_in), False)
+    l4 = li.AddByTwoPoints(a3.EndSketchPoint, pt2d(app, -L, -R_in))
+    a4 = ai.AddByCenterStartEndPoint(pt2d(app, -L, 0), l4.EndSketchPoint, l3.StartSketchPoint, False)
+    prof_in = sk_in.Profiles.AddForSolid()
+    comp.Features.ExtrudeFeatures.AddByDistanceExtent(
+        prof_in, mm(w_belt), inv.PartFeatureExtentDirectionEnum.kSymmetricExtentDirection,
+        inv.PartFeatureOperationEnum.kCutOperation
+    )
+
+    # 3. Dientes internos
+    sk_teeth = comp.Sketches.Add(comp.WorkPlanes.Item(3))
+    lt = sk_teeth.SketchLines
+    pitch = 16.0
+    w_t = 5.0
+    h_t = 1.8
+
+    n_teeth = int((2 * L - 40.0) / pitch)
+    for i in range(n_teeth):
+        x = (-L + 20.0) + i * pitch
+        lt.AddAsTwoPointRectangle(pt2d(app, x - w_t/2, -R_in), pt2d(app, x + w_t/2, -R_in + h_t))
+        lt.AddAsTwoPointRectangle(pt2d(app, x - w_t/2, R_in - h_t), pt2d(app, x + w_t/2, R_in))
+
+    prof_teeth = sk_teeth.Profiles.AddForSolid(True)
+    comp.Features.ExtrudeFeatures.AddByDistanceExtent(
+        prof_teeth, mm(w_belt), inv.PartFeatureExtentDirectionEnum.kSymmetricExtentDirection,
+        inv.PartFeatureOperationEnum.kJoinOperation
     )
 
     doc.SaveAs(ruta_completa, False)

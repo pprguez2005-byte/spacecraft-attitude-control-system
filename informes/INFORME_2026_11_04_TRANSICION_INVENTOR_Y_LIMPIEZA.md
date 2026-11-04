@@ -126,45 +126,54 @@ Se corrigió la orientación de las escuadras triangulares de fundición ([`Escu
   $$\mathbf{M}_{tornillo,2} = \mathbf{M}_{escuadra} \cdot \mathbf{T}(3{,}0, 0, 10{,}5) \cdot \mathbf{R}_y(90^\circ)$$
 - Total de fijaciones en el cubo: 16 escuadras de 90° y 32 tornillos M5 con arandela, visualmente verificados en sus cajeras y colisos.
 
-#### C. Mecanismo de Tracción Superior (Croquis Oficial 04/11/2026)
-Conforme al croquis manuscrito aportado por el usuario, se modeló e integró la cinemática de accionamiento superior:
-1. **Dos Cintas Transportadoras en Bucle Cerrado (`Cinta_Transportadora_20mm_L500.ipt`):**
-   - Montadas en los dos perfiles laterales superiores paralelos (Izquierdo $X = -260\text{ mm}$ y Derecho $X = +260\text{ mm}$).
-   - Geometría de banda continua en bucle con dos ramales rectos y dos tramos semicilíndricos de curvatura sobre poleas de radio $r = 9{,}5\text{ mm}$ (distancia entre centros $L = 460\text{ mm}$).
-2. **Tren de Engranajes Rectos 1:1 (`Engranaje_Recto_1a1_m1_Z20.ipt`):**
-   - Módulo métrico $m = 1{,}0\text{ mm}$, número de dientes $Z_1 = Z_2 = 20$, diámetro primitivo $D_p = 20{,}0\text{ mm}$, ancho de cara $b = 7{,}0\text{ mm}$.
-   - Distancia entre centros rigurosa $a = 20{,}0\text{ mm}$. Engranaje conducido montado coaxial al eje de la polea motriz izquierda, y engranaje conductor acoplado directamente al eje del motor NEMA 17.
+#### C. Mecanismo de Tracción Superior (Conforme al Croquis Oficial del Usuario)
+Conforme a la instrucción y croquis manuscrito aportado por el usuario (`uploaded_media_0_1793792956515.png`), se modeló e integró la cinemática de accionamiento superior con máxima fidelidad:
+1. **Dos Cintas Transportadoras Huecas con Dientes Internos (`Cinta_Transportadora_20mm_L500.ipt`):**
+   - Montadas longitudinalmente sobre los dos perfiles superiores paralelos (Izquierdo en $X = -260\text{ mm}$ y Derecho en $X = +260\text{ mm}$).
+   - Perfil de bucle cerrado hueco (estadio concéntrico exterior $R_{out} = 14{,}0\text{ mm}$ e interior $R_{in} = 11{,}5\text{ mm}$, ancho de cinta $12{,}0\text{ mm}$, longitud entre ejes $440{,}0\text{ mm}$).
+   - **Dentado interno paramétrico:** Dientes trapezoidales nítidos ($w = 5{,}0\text{ mm}$, $h = 1{,}8\text{ mm}$, paso $16{,}0\text{ mm}$) extruidos hacia el interior de la cavidad a lo largo de los ramales superior e inferior, reproduciendo fielmente el croquis.
+2. **Cabezal Motriz Frontal con Dos Engranajes Rectos 1:1 en el Interior (`Engranaje_Recto_1a1_m1_Z20.ipt`):**
+   - Dos engranajes rectos métricos con 20 dientes reales de evolvente ($m = 1{,}0\text{ mm}$, $Z = 20$, $D_p = 20{,}0\text{ mm}$, $D_a = 22{,}0\text{ mm}$, espesor $b = 7{,}0\text{ mm}$, taladro $\varnothing 5{,}0\text{ mm}$).
+   - **Engranaje 1 (Frontal / Motor):** Situado en el vértice de curvatura de la cinta ($Z = -220\text{ mm}$, $Y = 494\text{ mm}$, $X = -260\text{ mm}$), acoplado rígidamente al eje del motor NEMA 17.
+   - **Engranaje 2 (Conducido / Distribución):** Situado inmediatamente adyacente en el interior del bucle ($Z = -200\text{ mm}$, $Y = 494\text{ mm}$, $X = -260\text{ mm}$), engranando diente a diente con el Engranaje 1 a la distancia entre centros nominal $a = 20{,}0\text{ mm}$.
+   - Ambos engranajes quedan alojados en el interior del bucle de la cinta dentada, engranando solidariamente y transmitiendo el movimiento.
 3. **Motor Paso a Paso NEMA 17 (`Motor_NEMA17.ipt`):**
-   - Situado en la esquina superior izquierda ($X = -282\text{ mm}, Y = 509{,}5\text{ mm}, Z = -230\text{ mm}$), con su eje ingresando en dirección $+X$ hacia el engranaje motor.
+   - Montado sólidamente en la cara exterior del perfil 2020 superior izquierdo ($X = -282\text{ mm}$, $Y = 494\text{ mm}$, $Z = -220\text{ mm}$), con su eje ingresando en $+X$ directamente hacia el Engranaje 1.
 4. **Eje de Sincronización y Distribución Transversal (`Eje_Distribucion_5mm_L520.ipt`):**
-   - Eje calibrado de $\varnothing 5{,}0\text{ mm} \times 520{,}0\text{ mm}$ de longitud, extendiéndose transversalmente desde $X = -260\text{ mm}$ hasta $X = +260\text{ mm}$.
-   - Conecta solidariamente la polea motriz izquierda con la polea motriz derecha, garantizando el arrastre síncrono y simétrico de ambas cintas sin desfases angulares.
+   - Eje macizo rectificado de $\varnothing 5{,}0\text{ mm} \times 520{,}0\text{ mm}$ de longitud.
+   - Acoplado al núcleo del Engranaje 2 en $Z = -200\text{ mm}$ y extendiéndose transversalmente a través del ancho de la máquina (desde $X = -260\text{ mm}$ hasta $X = +260\text{ mm}$).
+   - Se acopla en el lateral derecho a un tercer engranaje recto (`Engranaje_Recto_1a1_m1_Z20.ipt`) que acciona la cinta derecha, garantizando tracción 100% síncrona sin holguras ni desalineaciones.
+5. **Poleas Locas Traseras de Retorno (`Polea_GT2_20T.ipt`):**
+   - Montadas en el extremo posterior ($Z = +220\text{ mm}$, $Y = 494\text{ mm}$) de ambas cintas sobre rodamientos para guiar el retorno de la banda.
 
 #### D. Batería de 4 Perfiles Transversales Apoyados
 - 4 perfiles extruidos 2020 de longitud $L = 540\text{ mm}$ (`Perfil_2020_L540.ipt`).
-- Apoyados directamente sobre el lomo superior de ambas cintas transportadoras ($Y_{apoyo} = 499{,}0\text{ mm}$, centro en $Y = 509{,}0\text{ mm}$), cruzando de $X = -270\text{ mm}$ a $X = +270\text{ mm}$.
-- Espaciados equitativamente a lo largo del avance longitudinal en $Z$: $Z = -120\text{ mm}, -40\text{ mm}, +40\text{ mm}, +120\text{ mm}$.
+- Apoyados directamente sobre la cara superior plana de ambas cintas transportadoras ($Y_{apoyo} = 508{,}0\text{ mm}$, centro del perfil en $Y = 518{,}0\text{ mm}$), cruzando de $X = -270\text{ mm}$ a $X = +270\text{ mm}$.
+- Distribución longitudinal uniforme en $Z$: $Z = -120\text{ mm}, -40\text{ mm}, +40\text{ mm}, +120\text{ mm}$.
 
 ---
 
 ## 5. Verificación Visual del Ensamblaje en Autodesk Inventor 2027
 
-El ensamblaje oficial se encuentra guardado y activo en [`Parte mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.iam) y [`Banco_Mecatronico_TFG_Principal.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_TFG_Principal.iam).
+El ensamblaje oficial se encuentra guardado y activo en [`Parte mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_Cubo_50x54.iam) y [`Banco_Mecatronico_TFG_Principal.iam`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/Banco_Mecatronico_TFG_Principal.iam), renderizado con el estilo visual profesional **Shaded with Edges (`kShadedWithEdgesRendering`)** que resalta todas las aristas y geometrías.
 
 Se generaron las siguientes capturas fotorrealistas de validación:
-1. **Vista Isométrica General:** [`cubo_completo_isometrica.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/cubo_completo_isometrica.png)
-2. **Vista Superior en Planta de la Batería:** [`cubo_completo_planta_bateria.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/cubo_completo_planta_bateria.png)
-3. **Vista de Conjunto Motor y Mecanismo:** [`cubo_completo_detalle_transmision.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/cubo_completo_detalle_transmision.png)
-4. **Detalle Primer Plano Escuadra con 2 Tornillos M5:** [`detalle_escuadra_y_tornillos_m5.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/detalle_escuadra_y_tornillos_m5.png)
-5. **Detalle Primer Plano Motor y Tren 1:1:** [`detalle_motor_engranajes_eje.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/detalle_motor_engranajes_eje.png)
+1. **Detalle Primer Plano Cabezal Motriz según Croquis:** [`detalle_cinta_engranajes_croquis.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/detalle_cinta_engranajes_croquis.png)  
+   *(Muestra la cinta hueca con sus dientes internos, el alojamiento del Engranaje 1 acoplado al motor NEMA 17, el Engranaje 2 engranado side-by-side, y el eje de distribución transversal emergiendo hacia la derecha)*.
+2. **Vista Isométrica General del Banco:** [`cubo_completo_isometrica.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/cubo_completo_isometrica.png)  
+   *(Vista axonométrica del cubo 50x54 cm, perfiles V-slot, 16 escuadras con 32 tornillos M5 enrasados, ambas cintas dentadas y los 4 perfiles transversales apoyados)*.
+3. **Vista Superior en Planta de la Batería:** [`cubo_completo_planta_bateria.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/cubo_completo_planta_bateria.png)  
+   *(Perspectiva cenital ortogonal que evidencia la equidistancia longitudinal y el paralelismo perfecto de la batería de perfiles)*.
+4. **Detalle Macro del Cabezal y Escuadra:** [`detalle_cabezal_engranajes_zoom.png`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/ensamblajes/detalle_cabezal_engranajes_zoom.png)  
+   *(Enfoque de alta resolución a las uniones con tornillos Allen M5 DIN 912 y núcleo trebolado de perfilería)*.
 
 ---
 
 ## 6. Automatización y Script Maestro
 
-Se dispone de [`Parte mecanica/Inventor/scripts/generar_cubo_con_cintas.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/generar_cubo_con_cintas.py) que permite reconstruir y abrir de forma 100% determinista todo el proyecto CAD de Inventor con un único comando:
+Se dispone de [`Parte mecanica/Inventor/scripts/actualizar_modelo_completo.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/actualizar_modelo_completo.py) y [`generar_cubo_con_cintas.py`](file:///C:/Users/Usuario/Desktop/universidad/clase/TFG/DESARROLLO_TFG/Parte%20mecanica/Inventor/scripts/generar_cubo_con_cintas.py) que permiten reconstruir y actualizar de forma 100% determinista todo el proyecto CAD de Inventor con un único comando:
 ```powershell
-python "Parte mecanica/Inventor/scripts/generar_cubo_con_cintas.py"
+python "Parte mecanica/Inventor/scripts/actualizar_modelo_completo.py"
 ```
 
 ---

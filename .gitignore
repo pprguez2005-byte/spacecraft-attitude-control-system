@@ -1,0 +1,11 @@
+# Autodesk Inventor
+**/OldVersions/
+*.lck
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+
+# Backups
+backups/
