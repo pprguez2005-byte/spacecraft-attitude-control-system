@@ -2,10 +2,32 @@
 **/OldVersions/
 *.lck
 *.tmp
+*.bak
+*.dlog
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.venv/
+env/
+
+# Microsoft Office temporary lock files (e.g. editing ListaCompra.xlsx)
+~$*.xlsx
+~$*.docx
+~$*.pptx
+
+# Arduino & PlatformIO build artifacts
+.pio/
+build/
+*.hex
+*.bin
+*.elf
 
 # Backups
 backups/
+
+# Operating System temporary files
+Thumbs.db
+Desktop.ini
+.DS_Store
