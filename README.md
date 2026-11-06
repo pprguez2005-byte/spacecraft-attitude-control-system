@@ -8,7 +8,7 @@
 
 > **Undergraduate Thesis (Trabajo de Fin de Grado - TFG)**  
 > *Sistema Embebido de Control de Posición Bidireccional para Orientación de Prototipos Espaciales en Microgravedad Simulada*  
-> **Author:** Pablo Rodríguez ([@pprguez2005-byte](https://github.com/pprguez2005-byte))
+> **Author:** Pelayo Pache Rodríguez ([PelayoPacheRodriguez](https://github.com/PelayoPacheRodriguez))
 
 ---
 
